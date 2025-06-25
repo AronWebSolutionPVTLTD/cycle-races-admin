@@ -20,7 +20,7 @@ export default function HeaderContent() {
 
   return (
     <>
-      {!downLG && <Search />}
+      {/* {!downLG && <Search />} */}
       {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
       {/* <IconButton
         component={Link}

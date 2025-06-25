@@ -78,7 +78,6 @@ const TeamList = () => {
   }, []);
 
   const fetchTeams = useCallback(async () => {
- 
     setLoading(true);
     try {
       let endpoint = '/teams';
@@ -132,7 +131,7 @@ const TeamList = () => {
     const timer = setTimeout(() => {
       if (searchTerm !== undefined) {
         setPage(0); // Reset to first page when searching
-    }
+      }
     }, 500); // 500ms debounce
 
     return () => clearTimeout(timer);
@@ -166,7 +165,7 @@ const TeamList = () => {
     setSelectedCountry(null);
     setSearchTerm('');
     fetchTeams();
-   };
+  };
 
   // Filter menu handlers
   const handleFilterMenu = (filterType) => (event) => {
@@ -406,7 +405,7 @@ const TeamList = () => {
               startIcon={<CalendarOutlined />}
               onClick={handleFilterMenu('year')}
               disabled={!years.length}
-              sx={{ width: '120px' }}  
+              sx={{ width: '120px' }}
               size="small"
             >
               Year
@@ -426,7 +425,7 @@ const TeamList = () => {
               startIcon={<GlobalOutlined />}
               onClick={handleFilterMenu('country')}
               disabled={!countries.length}
-              sx={{ width: '120px' }}  
+              sx={{ width: '120px' }}
               size="small"
             >
               Country
@@ -452,7 +451,7 @@ const TeamList = () => {
                 startIcon={<ReloadOutlined />}
                 onClick={handleRefresh}
                 // sx={{ flex: { xs: '1', sm: '0 0 auto' } }}
-                sx={{ width: '120px' }}  
+                sx={{ width: '120px' }}
               >
                 Refresh
               </Button>
@@ -464,11 +463,10 @@ const TeamList = () => {
               color="primary"
               startIcon={<PlusOutlined />}
               onClick={() => navigate('/team/create')}
-              sx={{ width: '120px' }}  
+              sx={{ width: '120px' }}
             >
               Add Team
             </Button>
-            
           </Stack>
         </Box>
       </Box>
@@ -501,7 +499,7 @@ const TeamList = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         totalCount={totalCount}
-       onPageChange={handlePageChange}
+        onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onRowClick={handleRowClick}
       />
@@ -523,12 +521,7 @@ const TeamList = () => {
       </Dialog>
 
       {/* Custom Snackbar */}
-      <CustomSnackbar
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-         onClose={handleCloseSnackbar}
-      />
+      <CustomSnackbar open={snackbar.open} message={snackbar.message} severity={snackbar.severity} onClose={handleCloseSnackbar} />
     </Box>
   );
 };

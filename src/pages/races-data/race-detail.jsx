@@ -114,15 +114,14 @@ const RaceDetailPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-     
-          <Button
-              startIcon={<ArrowLeftOutlined />}
-              variant="contained"
-              onClick={() => navigate('/races-list')}
-              sx={{ mb: 3, bgcolor: '#1976d2', '&:hover': { bgcolor: '#1565c0' } }}
-            >
-               Back to Races
-            </Button>
+      <Button
+        startIcon={<ArrowLeftOutlined />}
+        variant="contained"
+        onClick={() => navigate('/races-list')}
+        sx={{ mb: 3, bgcolor: '#1976d2', '&:hover': { bgcolor: '#1565c0' } }}
+      >
+        Back to Races
+      </Button>
 
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 2 }}>
         <Box
