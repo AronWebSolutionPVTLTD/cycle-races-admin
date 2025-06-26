@@ -34,6 +34,7 @@ import MoreOutlined from '@ant-design/icons/MoreOutlined';
 import apiRequest from '../../api/api-utils';
 import MonthlyLineChart from '../../sections/dashboard/default/MonthlyLineChart';
 import { ModernRecentRiders } from '../../sections/dashboard/default/RecentRiders';
+import { CarOutlined, FlagOutlined, TeamOutlined, ThunderboltOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
 
 export default function DashboardDefault() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -112,60 +113,116 @@ export default function DashboardDefault() {
         <Grid size={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
             <Box>
-              <Typography variant="h4" fontWeight={700} color="text.primary">
+              <Typography variant="h2" fontWeight={700} color="text.primary">
                 Dashboard
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 Welcome back! Here's what's happening with your cycling platform.
               </Typography>
             </Box>
-            {/* <Button
-              variant="contained"
-              sx={{
-                borderRadius: 3,
-                textTransform: 'none',
-                fontWeight: 600,
-                px: 3
-              }}
-            >
-              View Reports
-            </Button> */}
           </Stack>
         </Grid>
 
-        {/* Statistics Cards */}
+        {/* Enhanced Statistics Cards */}
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
           <Card
             sx={{
               p: 3,
-              borderRadius: 4,
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              borderRadius: 3,
+              background: (theme) => `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
               color: 'white',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: (theme) => `0 20px 40px ${theme.palette.primary.main}20`,
+                '& .stat-icon': {
+                  transform: 'scale(1.1) rotate(5deg)'
+                },
+                '& .stat-number': {
+                  transform: 'scale(1.05)'
+                }
+              }
             }}
           >
-            <Box sx={{ position: 'relative', zIndex: 1 }}>
-              <Typography variant="h3" fontWeight={700}>
+            <Box sx={{ position: 'relative', zIndex: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <Box
+                  className="stat-icon"
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 2,
+                    bgcolor: 'rgba(255,255,255,0.15)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}
+                >
+                  <ThunderboltOutlined   style={{ fontSize: 24, color: 'white' }} />
+                </Box>
+              </Box>
+
+              <Typography
+                variant="h3"
+                fontWeight={800}
+                className="stat-number"
+                sx={{
+                  mb: 0.5,
+                  letterSpacing: '-0.02em',
+                  transition: 'all 0.3s ease',
+                  background: 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
                 {dashboardData?.totalrace?.toLocaleString() || '0'}
               </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9, mt: 0.5 }}>
+
+              <Typography variant="body1" sx={{ opacity: 0.9, fontWeight: 500 }}>
                 Total Races
               </Typography>
-              {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mt: 2 }}>
-                <RiseOutlined style={{ fontSize: 16 }} />
-                <Typography variant="caption">+12% from last month</Typography>
-              </Stack> */}
             </Box>
+
+            {/* Decorative Elements */}
             <Box
               sx={{
                 position: 'absolute',
-                top: -20,
-                right: -20,
+                top: -30,
+                right: -30,
+                width: 120,
+                height: 120,
+                borderRadius: '50%',
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 0
+              }}
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: -20,
+                left: -20,
                 width: 80,
                 height: 80,
                 borderRadius: '50%',
-                bgcolor: 'rgba(255,255,255,0.1)'
+                bgcolor: 'rgba(255,255,255,0.05)',
+                zIndex: 0
+              }}
+            />
+
+            {/* Glassmorphism overlay */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 1
               }}
             />
           </Card>
@@ -175,34 +232,101 @@ export default function DashboardDefault() {
           <Card
             sx={{
               p: 3,
-              borderRadius: 4,
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              background: (theme) => `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.secondary.dark} 100%)`,
               color: 'white',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: (theme) => `0 20px 40px ${theme.palette.secondary.main}20`,
+                '& .stat-icon': {
+                  transform: 'scale(1.1) rotate(5deg)'
+                },
+                '& .stat-number': {
+                  transform: 'scale(1.05)'
+                }
+              }
             }}
           >
-            <Box sx={{ position: 'relative', zIndex: 1 }}>
-              <Typography variant="h3" fontWeight={700}>
+            <Box sx={{ position: 'relative', zIndex: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <Box
+                  className="stat-icon"
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 2,
+                    bgcolor: 'rgba(255,255,255,0.15)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}
+                >
+                  <UserOutlined  style={{ fontSize: 24, color: 'white' }} />
+                </Box>
+              </Box>
+
+              <Typography
+                variant="h3"
+                fontWeight={800}
+                className="stat-number"
+                sx={{
+                  mb: 0.5,
+                  letterSpacing: '-0.02em',
+                  transition: 'all 0.3s ease',
+                  background: 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
                 {dashboardData?.totalrider?.toLocaleString() || '0'}
               </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9, mt: 0.5 }}>
+
+              <Typography variant="body1" sx={{ opacity: 0.9, fontWeight: 500 }}>
                 Total Riders
               </Typography>
-              {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mt: 2 }}>
-                <RiseOutlined style={{ fontSize: 16 }} />
-                <Typography variant="caption">+8% from last month</Typography>
-              </Stack> */}
             </Box>
+
+            {/* Decorative Elements */}
             <Box
               sx={{
                 position: 'absolute',
-                top: -20,
-                right: -20,
+                top: -30,
+                right: -30,
+                width: 120,
+                height: 120,
+                borderRadius: '50%',
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 0
+              }}
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: -20,
+                left: -20,
                 width: 80,
                 height: 80,
                 borderRadius: '50%',
-                bgcolor: 'rgba(255,255,255,0.1)'
+                bgcolor: 'rgba(255,255,255,0.05)',
+                zIndex: 0
+              }}
+            />
+
+            {/* Glassmorphism overlay */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 1
               }}
             />
           </Card>
@@ -212,34 +336,101 @@ export default function DashboardDefault() {
           <Card
             sx={{
               p: 3,
-              borderRadius: 4,
-              background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+              borderRadius: 3,
+              background: (theme) => `linear-gradient(135deg, ${theme.palette.info.main} 0%, ${theme.palette.info.dark} 100%)`,
               color: 'white',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: (theme) => `0 20px 40px ${theme.palette.info.main}20`,
+                '& .stat-icon': {
+                  transform: 'scale(1.1) rotate(5deg)'
+                },
+                '& .stat-number': {
+                  transform: 'scale(1.05)'
+                }
+              }
             }}
           >
-            <Box sx={{ position: 'relative', zIndex: 1 }}>
-              <Typography variant="h3" fontWeight={700}>
+            <Box sx={{ position: 'relative', zIndex: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <Box
+                  className="stat-icon"
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 2,
+                    bgcolor: 'rgba(255,255,255,0.15)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}
+                >
+                  <UsergroupAddOutlined   style={{ fontSize: 24, color: 'white' }} />
+                </Box>
+              </Box>
+
+              <Typography
+                variant="h3"
+                fontWeight={800}
+                className="stat-number"
+                sx={{
+                  mb: 0.5,
+                  letterSpacing: '-0.02em',
+                  transition: 'all 0.3s ease',
+                  background: 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
                 {dashboardData?.totalteam?.toLocaleString() || '0'}
               </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9, mt: 0.5 }}>
+
+              <Typography variant="body1" sx={{ opacity: 0.9, fontWeight: 500 }}>
                 Total Teams
               </Typography>
-              {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mt: 2 }}>
-                  <RiseOutlined style={{ fontSize: 16 }} />
-                  <Typography variant="caption">+15% from last month</Typography>
-                </Stack> */}
             </Box>
+
+            {/* Decorative Elements */}
             <Box
               sx={{
                 position: 'absolute',
-                top: -20,
-                right: -20,
+                top: -30,
+                right: -30,
+                width: 120,
+                height: 120,
+                borderRadius: '50%',
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 0
+              }}
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: -20,
+                left: -20,
                 width: 80,
                 height: 80,
                 borderRadius: '50%',
-                bgcolor: 'rgba(255,255,255,0.1)'
+                bgcolor: 'rgba(255,255,255,0.05)',
+                zIndex: 0
+              }}
+            />
+
+            {/* Glassmorphism overlay */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 1
               }}
             />
           </Card>
@@ -249,34 +440,116 @@ export default function DashboardDefault() {
           <Card
             sx={{
               p: 3,
-              borderRadius: 4,
-              background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+              borderRadius: 3,
+              background: (theme) => `linear-gradient(135deg, ${theme.palette.success.main} 0%, ${theme.palette.success.dark} 100%)`,
               color: 'white',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: (theme) => `0 20px 40px ${theme.palette.success.main}20`,
+                '& .stat-icon': {
+                  transform: 'scale(1.1) rotate(5deg)'
+                },
+                '& .stat-number': {
+                  transform: 'scale(1.05)'
+                }
+              }
             }}
           >
-            <Box sx={{ position: 'relative', zIndex: 1 }}>
-              <Typography variant="h3" fontWeight={700}>
+            <Box sx={{ position: 'relative', zIndex: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <Box
+                  className="stat-icon"
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 2,
+                    bgcolor: 'rgba(255,255,255,0.15)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}
+                >
+                  <FlagOutlined style={{ fontSize: 24, color: 'white' }} />
+                </Box>
+              </Box>
+
+              <Typography
+                variant="h3"
+                fontWeight={800}
+                className="stat-number"
+                sx={{
+                  mb: 0.5,
+                  letterSpacing: '-0.02em',
+                  transition: 'all 0.3s ease',
+                  background: 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
                 {dashboardData?.totalstages?.toLocaleString() || '0'}
               </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9, mt: 0.5 }}>
+
+              <Typography variant="body1" sx={{ opacity: 0.9, fontWeight: 500 }}>
                 Total Stages
               </Typography>
+
               {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mt: 2 }}>
-                <RiseOutlined style={{ fontSize: 16 }} />
-                <Typography variant="caption">+22% from last month</Typography>
+                <Box
+                  sx={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    bgcolor: '#4ade80',
+                    animation: 'pulse 2s infinite'
+                  }}
+                />
+                <Typography variant="caption" sx={{ opacity: 0.8, fontWeight: 500 }}>
+                  Live Data
+                </Typography>
               </Stack> */}
             </Box>
+
+            {/* Decorative Elements */}
             <Box
               sx={{
                 position: 'absolute',
-                top: -20,
-                right: -20,
+                top: -30,
+                right: -30,
+                width: 120,
+                height: 120,
+                borderRadius: '50%',
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 0
+              }}
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: -20,
+                left: -20,
                 width: 80,
                 height: 80,
                 borderRadius: '50%',
-                bgcolor: 'rgba(255,255,255,0.1)'
+                bgcolor: 'rgba(255,255,255,0.05)',
+                zIndex: 0
+              }}
+            />
+
+            {/* Glassmorphism overlay */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)',
+                zIndex: 1
               }}
             />
           </Card>
@@ -321,8 +594,6 @@ export default function DashboardDefault() {
               </Box>
             </Stack>
           </Card>
-
-         
         </Grid>
 
         {/* Recent Riders Section */}

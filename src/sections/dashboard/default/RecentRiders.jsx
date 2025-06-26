@@ -1,23 +1,8 @@
-import { MoreOutlined } from "@ant-design/icons";
-import { Avatar, Box, Card, Chip, IconButton, Stack, Typography } from "@mui/material";
+import { MoreOutlined } from '@ant-design/icons';
+import { Avatar, Box, Card, Chip, IconButton, Stack, Typography } from '@mui/material';
+import { renderFlag } from '../../../pages/flag';
 
- export const ModernRecentRiders = ({ riders }) => {
-  const getCountryFlag = (nationality) => {
-    const flagMap = {
-      es: '🇪🇸',
-      py: '🇵🇾',
-      us: '🇺🇸',
-      fr: '🇫🇷',
-      it: '🇮🇹',
-      de: '🇩🇪',
-      gb: '🇬🇧',
-      nl: '🇳🇱',
-      be: '🇧🇪',
-      co: '🇨🇴'
-    };
-    return flagMap[nationality] || '🏁';
-  };
-
+export const ModernRecentRiders = ({ riders }) => {
   const getInitials = (name) => {
     return name
       .split(' ')
@@ -69,11 +54,9 @@ import { Avatar, Box, Card, Chip, IconButton, Stack, Typography } from "@mui/mat
 
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                  {renderFlag(rider?.nationality)}
                   <Typography variant="subtitle1" fontWeight={600} noWrap>
                     {rider.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontSize: '1.2rem' }}>
-                    {getCountryFlag(rider.nationality)}
                   </Typography>
                 </Stack>
 

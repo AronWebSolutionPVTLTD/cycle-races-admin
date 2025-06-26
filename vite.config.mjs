@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       global: 'window'
     },
     resolve: {
-      alias: [
+      alias: {
         // { find: '', replacement: path.resolve(__dirname, 'src') },
         // {
         //   find: /^~(.+)/,
@@ -37,9 +37,10 @@ export default defineConfig(({ mode }) => {
         //   find: 'assets',
         //   replacement: path.join(process.cwd(), 'src/assets')
         // },
-      ]
+         'motion-dom': '@motionone/dom'
+      }
     },
     base: API_URL,
-    plugins: [react(), jsconfigPaths()]
+    plugins: [react(), jsconfigPaths()],
   };
 });
