@@ -147,7 +147,7 @@ const TeamList = () => {
   };
 
   const handleRowClick = (team) => {
-    navigate(`/teams/${team._id}`);
+    navigate(`/team/${team._id}`);
   };
 
   const handleSearchChange = (e) => {

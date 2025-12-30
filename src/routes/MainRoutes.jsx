@@ -16,6 +16,8 @@ import TeamForm from '../pages/team-data/create-edit';
 import StageManagement from '../pages/stages-data/stages-list';
 import StageDetail from '../pages/stages-data/stage-detail';
 import StageForm from '../pages/stages-data/create-edit';
+import RaceMerging from '../pages/merge-data/racemerging';
+import TeamMerging from '../pages/merge-data/teammerging';
 
 // render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
@@ -131,7 +133,15 @@ const MainRoutes = {
     {
       path: 'stage/:id/edit',
       element: <StageForm mode="edit" />
-    }
+    },
+    {
+      path: 'racemerging',
+      element: <RaceMerging />
+    },
+    {
+      path: 'teammerging',
+      element: <TeamMerging />
+    },
   ]
 };
 

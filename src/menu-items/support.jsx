@@ -12,7 +12,7 @@ const icons = {
 
 const support = {
   id: 'support',
-  title: 'Support',
+  title: 'Management',
   type: 'group',
   children: [
     {
@@ -42,15 +42,22 @@ const support = {
       type: 'item',
       url: '/stages',
       icon: icons.OrderedListOutlined
-    }
+    },
 
-    // {
-    //   id: 'sample-page',
-    //   title: 'Sample Page',
-    //   type: 'item',
-    //   url: '/sample-page',
-    //   icon: icons.ChromeOutlined
-    // },
+    {
+      id: 'racemerging',
+      title: 'Race Merging',
+      type: 'item',
+      url: '/racemerging',
+      icon: icons.ChromeOutlined
+    },
+    {
+      id: 'teammerging',
+      title: 'Team Merging',
+      type: 'item',
+      url: '/teammerging',
+      icon: icons.ChromeOutlined
+    },
     // {
     //   id: 'documentation',
     //   title: 'Documentation',
