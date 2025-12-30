@@ -1,12 +1,12 @@
 // material-ui
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import logoIconDark from 'assets/images/icons/site-logo.svg';
 
 export default function Footer() {
   return (
     <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', p: '24px 16px 0px', mt: 'auto' }}>
-      <Typography variant="caption">
+      {/* <Typography variant="caption">
         &copy; All rights reserved{' '}
         <Link href="https://codedthemes.com/" target="_blank" underline="hover">
           CodedThemes
@@ -22,7 +22,8 @@ export default function Footer() {
         <Link href="https://mui.com/store/terms/" target="_blank" variant="caption" color="text.primary">
           Terms
         </Link>
-      </Stack>
+      </Stack> */}
+         <img src={logoIconDark} alt="Mantis" sx={{ width: '100%' }} />
     </Stack>
   );
 }

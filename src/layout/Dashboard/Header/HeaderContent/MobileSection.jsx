@@ -89,7 +89,7 @@ export default function MobileSection() {
               <ClickAwayListener onClickAway={handleClose}>
                 <AppBar color="inherit">
                   <Toolbar>
-                    <Search />
+                    {/* <Search /> */}
                     <Profile />
                   </Toolbar>
                 </AppBar>

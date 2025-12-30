@@ -36,7 +36,7 @@ export default function HeaderContent() {
 
       {/* <Notification /> */}
       {!downLG && <Profile />}
-      {downLG && <MobileSection />}
+      {/* {downLG && <MobileSection />} */}
     </>
   );
 }

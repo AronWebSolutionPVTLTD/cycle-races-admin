@@ -29,8 +29,9 @@ import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
-import { getToken, removeToken } from '../../../../../api/auth-utils';
+import { getToken, removeToken, setToken } from '../../../../../api/auth-utils';
 import { useNavigate } from 'react-router';
+import apiRequest from '../../../../../api/api-utils';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -92,8 +93,9 @@ export default function Profile() {
       >
         <Stack direction="row" sx={{ gap: 1.25, alignItems: 'center', p: 0.5 }}>
           <Avatar alt="profile user" src={avatar1} size="sm" />
-          {adminInfo?.name}
-          <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}></Typography>
+          <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
+            {adminInfo?.name || 'User'}
+          </Typography>
         </Stack>
       </ButtonBase>
       <Popper
@@ -125,22 +127,29 @@ export default function Profile() {
                         <Stack direction="row" sx={{ gap: 1.25, alignItems: 'center' }}>
                           <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                           <Stack>
-                            <Typography variant="h6">John Doe</Typography>
+                            <Typography variant="h6">{adminInfo?.name || 'User'}</Typography>
                             <Typography variant="body2" color="text.secondary">
-                              UI/UX Designer
+                              {adminInfo?.email || ''}
                             </Typography>
                           </Stack>
                         </Stack>
                       </Grid>
                       <Grid>
-                        <Tooltip
-                          title="Logout"
-                          onClick={() => {
-                            removeToken();
-                            navigate('/login');
-                          }}
-                        >
-                          <IconButton size="large" sx={{ color: 'text.primary' }}>
+                        <Tooltip title="Logout">
+                          <IconButton 
+                            size="large" 
+                            sx={{ color: 'text.primary' }}
+                            onClick={async () => {
+                              try {
+                                await apiRequest('POST', '/admin/logout');
+                              } catch (error) {
+                                console.error('Logout API error:', error);
+                              } finally {
+                                removeToken();
+                                navigate('/login');
+                              }
+                            }}
+                          >
                             <LogoutOutlined />
                           </IconButton>
                         </Tooltip>
@@ -166,7 +175,7 @@ export default function Profile() {
                         label="Profile"
                         {...a11yProps(0)}
                       />
-                      <Tab
+                      {/* <Tab
                         sx={{
                           display: 'flex',
                           flexDirection: 'row',
@@ -181,15 +190,23 @@ export default function Profile() {
                         icon={<SettingOutlined />}
                         label="Setting"
                         {...a11yProps(1)}
-                      />
+                      /> */}
                     </Tabs>
                   </Box>
                   <TabPanel value={value} index={0} dir={theme.direction}>
-                    <ProfileTab />
+                    <ProfileTab 
+                      adminInfo={adminInfo}
+                      onUpdateProfile={(updatedInfo) => {
+                        // Update adminInfo in localStorage
+                        setToken(getToken().token, updatedInfo);
+                        // Force re-render by updating state
+                        window.location.reload();
+                      }}
+                    />
                   </TabPanel>
-                  <TabPanel value={value} index={1} dir={theme.direction}>
+                  {/* <TabPanel value={value} index={1} dir={theme.direction}>
                     <SettingTab />
-                  </TabPanel>
+                  </TabPanel> */}
                 </MainCard>
               </ClickAwayListener>
             </Paper>
