@@ -36,8 +36,7 @@ const RaceDetailPage = () => {
   }, [id]);
 
   const handleDelete = async () => {
-    debugger;
-    if (window.confirm('Are you sure you want to delete this race?')) {
+if (window.confirm('Are you sure you want to delete this race?')) {
       try {
         const response = await fetch(`/api/races/${id}`, {
           method: 'DELETE',

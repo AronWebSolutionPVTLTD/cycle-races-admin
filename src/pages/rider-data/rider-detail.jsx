@@ -342,7 +342,7 @@ const RiderDetailsPage = () => {
               {/* Added Info */}
               <Box sx={{ mt: 3 }}>
                 <Typography variant="caption" color="text.secondary">
-                  Added on: {format(new Date(rider.created_at), 'MMMM dd, yyyy')}
+                  Added on: {rider.createdAt ? format(new Date(rider.createdAt), 'MMMM dd, yyyy') : 'Not available'}
                 </Typography>
               </Box>
             </Box>
