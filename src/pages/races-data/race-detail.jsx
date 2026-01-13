@@ -3,6 +3,7 @@ import { Box, Typography, Container, Paper, Button, CircularProgress, Snackbar, 
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, FlagOutlined, CalendarOutlined, AppstoreOutlined } from '@ant-design/icons';
 import apiRequest from '../../api/api-utils';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 const RaceDetailPage = () => {
   const { id } = useParams();
@@ -10,6 +11,7 @@ const RaceDetailPage = () => {
   const [race, setRace] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -35,35 +37,32 @@ const RaceDetailPage = () => {
     fetchRace();
   }, [id]);
 
-  const handleDelete = async () => {
-if (window.confirm('Are you sure you want to delete this race?')) {
-      try {
-        const response = await fetch(`/api/races/${id}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
 
-        if (!response.ok) {
-          throw new Error('Failed to delete race');
-        }
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+  };
 
-        setSnackbar({
-          open: true,
-          message: 'Race deleted successfully',
-          severity: 'success'
-        });
-
-        // Navigate back to races list after successful deletion
-        setTimeout(() => navigate('/races'), 1500);
-      } catch (err) {
-        setSnackbar({
-          open: true,
-          message: err.message,
-          severity: 'error'
-        });
-      }
+  const handleDeleteConfirm = async () => {
+    try {
+      await apiRequest('DELETE', `/races/${id}`);
+      setSnackbar({
+        open: true,
+        message: 'Race deleted successfully',
+        severity: 'success'
+      });
+      // Navigate back to races list after successful deletion
+      setTimeout(() => navigate('/races-list'), 1500);
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: err.message || 'Failed to delete race',
+        severity: 'error'
+      });
+    } finally {
+      setDeleteDialogOpen(false);
     }
   };
 
@@ -140,7 +139,7 @@ if (window.confirm('Are you sure you want to delete this race?')) {
             <Button variant="outlined" color="primary" sx={{ mr: 1 }} onClick={handleEditClick} startIcon={<EditOutlined />}>
               Edit
             </Button>
-            <Button variant="outlined" color="error" onClick={handleDelete} startIcon={<DeleteOutlined />}>
+            <Button variant="outlined" color="error" onClick={handleDeleteClick} startIcon={<DeleteOutlined />}>
               Delete
             </Button>
           </Box>
@@ -200,6 +199,14 @@ if (window.confirm('Are you sure you want to delete this race?')) {
           <Chip label={`ID: ${race._id}`} variant="outlined" size="small" />
         </Box>
       </Paper>
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={race?.race}
+        itemType="race"
+      />
 
       <Snackbar
         open={snackbar.open}

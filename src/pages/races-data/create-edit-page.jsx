@@ -107,7 +107,7 @@ const RaceForm = ({ mode = 'create' }) => {
     const fetchCountries = async () => {
       try {
         setLoadingCountries(true);
-        const res = await axios('https://restcountries.com/v3.1/all');
+        const res = await axios.get('https://restcountries.com/v3.1/all?fields=cca2,name');
 
         const formatted = res.data.map((country) => ({
           code: country.cca2.toLowerCase(),

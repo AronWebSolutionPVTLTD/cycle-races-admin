@@ -10,11 +10,6 @@ import {
   MenuItem,
   Chip,
   Avatar,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Tooltip,
   Stack
 } from '@mui/material';
@@ -33,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import CustomTable from '../table/custom-table';
 import CustomSnackbar from '../custom-snackbar';
 import apiRequest from '../../api/api-utils';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 const TeamList = () => {
   const navigate = useNavigate();
@@ -505,20 +501,13 @@ const TeamList = () => {
       />
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel} fullWidth maxWidth="xs">
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete team: {selectedTeam?.teamName}? This action cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel}>Cancel</Button>
-          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={selectedTeam?.teamName}
+        itemType="team"
+      />
 
       {/* Custom Snackbar */}
       <CustomSnackbar open={snackbar.open} message={snackbar.message} severity={snackbar.severity} onClose={handleCloseSnackbar} />

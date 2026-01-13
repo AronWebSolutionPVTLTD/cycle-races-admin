@@ -13,6 +13,7 @@ import {
   EnvironmentOutlined
 } from '@ant-design/icons';
 import apiRequest from '../../api/api-utils';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 // Flag emoji mapping for common countries
 const getFlagEmoji = (countryCode) => {
@@ -30,6 +31,7 @@ const RiderDetailsPage = () => {
   const [rider, setRider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Snackbar state
   const [snackbar, setSnackbar] = useState({
@@ -89,19 +91,27 @@ const RiderDetailsPage = () => {
     navigate('/riders');
   };
 
-  const handleDelete = async () => {
-    if (window.confirm(`Are you sure you want to delete ${rider.name}?`)) {
-      try {
-        await apiRequest('DELETE', `/riders/${id}`);
-        showSnackbar(`Rider ${rider.name} deleted successfully`, 'success');
-        // Add a slight delay before navigating to allow the user to see the success message
-        setTimeout(() => {
-          navigate('/riders');
-        }, 1500);
-      } catch (err) {
-        setError(err);
-        showSnackbar(err.message || 'Failed to delete rider', 'error');
-      }
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await apiRequest('DELETE', `/riders/${id}`);
+      showSnackbar(`Rider ${rider.name} deleted successfully`, 'success');
+      // Add a slight delay before navigating to allow the user to see the success message
+      setTimeout(() => {
+        navigate('/riders');
+      }, 1500);
+    } catch (err) {
+      setError(err);
+      showSnackbar(err.message || 'Failed to delete rider', 'error');
+    } finally {
+      setDeleteDialogOpen(false);
     }
   };
 
@@ -342,7 +352,7 @@ const RiderDetailsPage = () => {
               {/* Added Info */}
               <Box sx={{ mt: 3 }}>
                 <Typography variant="caption" color="text.secondary">
-                  Added on: {rider.createdAt ? format(new Date(rider.createdAt), 'MMMM dd, yyyy') : 'Not available'}
+                  Added on: {rider.created_at ? format(new Date(rider.created_at), 'MMMM dd, yyyy') : 'Not available'}
                 </Typography>
               </Box>
             </Box>
@@ -363,12 +373,20 @@ const RiderDetailsPage = () => {
             <Button variant="contained" color="primary" startIcon={<EditOutlined />} onClick={handleEdit}>
               Edit
             </Button>
-            <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleDelete}>
+            <Button variant="outlined" color="error" startIcon={<DeleteOutlined />} onClick={handleDeleteClick}>
               Delete
             </Button>
           </Box>
         </Paper>
       </Box>
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={rider?.name}
+        itemType="rider"
+      />
 
       {/* Snackbar for main success/error messages */}
       <Snackbar

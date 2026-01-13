@@ -33,6 +33,7 @@ import {
 } from '@ant-design/icons';
 import CustomTable from '../table/custom-table';
 import apiRequest from '../../api/api-utils';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 const TeamDetail = () => {
   const { id } = useParams();
@@ -353,7 +354,7 @@ const TeamDetail = () => {
             variant="outlined"
             color="primary"
             startIcon={<EditOutlined />}
-            onClick={() => navigate(`/teams/${id}/edit`)}
+            onClick={() => navigate(`/team/${id}/edit`)}
             fullWidth={isMobile}
           >
             Edit
@@ -487,18 +488,14 @@ const TeamDetail = () => {
       )}
 
       {/* Delete Team Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} fullWidth maxWidth="xs">
-        <DialogTitle>Delete Team</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Are you sure you want to delete the team "{team.teamName}"? This action cannot be undone.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleDelete} color="error" variant="contained">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        title={team?.teamName}
+        itemType="team"
+        dialogTitle="Delete Team"
+      />
 
       {/* Remove Rider Confirmation Dialog */}
       <Dialog open={removeRiderDialogOpen} onClose={() => setRemoveRiderDialogOpen(false)} fullWidth maxWidth="xs">

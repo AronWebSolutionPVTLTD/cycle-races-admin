@@ -20,6 +20,7 @@ import { EditOutlined, DeleteOutlined, PlusOutlined, ReloadOutlined, EyeOutlined
 import CustomTable from '../table/custom-table';
 import CustomSnackbar from '../custom-snackbar';
 import apiRequest from '../../api/api-utils';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 const StageManagement = () => {
   const navigate = useNavigate();
@@ -42,6 +43,8 @@ const StageManagement = () => {
   const [selectedRaceId, setSelectedRaceId] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedStage, setSelectedStage] = useState(null);
 
   const [notification, setNotification] = useState({
     open: false,
@@ -209,9 +212,21 @@ const StageManagement = () => {
     fetchStages();
   }, [fetchStages]);
 
-  const handleDeleteStage = async (id) => {
+  const handleDeleteClick = (stage) => {
+    setSelectedStage(stage);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setSelectedStage(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedStage) return;
+
     try {
-      const response = await apiRequest('DELETE', `/stages/${id}`);
+      const response = await apiRequest('DELETE', `/stages/${selectedStage._id}`);
 
       // Check if the response has a status field
       if (response && response.status === false) {
@@ -234,6 +249,9 @@ const StageManagement = () => {
         message: err.message || 'An error occurred while deleting stage',
         severity: 'error'
       });
+    } finally {
+      setDeleteDialogOpen(false);
+      setSelectedStage(null);
     }
   };
 
@@ -342,7 +360,7 @@ const StageManagement = () => {
               color="error"
               onClick={(e) => {
                 e.stopPropagation();
-                handleDeleteStage(row._id);
+                handleDeleteClick(row);
               }}
             >
               <DeleteOutlined />
@@ -440,6 +458,15 @@ const StageManagement = () => {
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
         onRowClick={handleRowClick}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={selectedStage?.title || selectedStage?.stage_id}
+        itemType="stage"
       />
 
       <CustomSnackbar

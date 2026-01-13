@@ -15,12 +15,14 @@ import {
 } from '@ant-design/icons';
 import apiRequest from '../../api/api-utils';
 import CustomSnackbar from '../custom-snackbar';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 const StageDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [stage, setStage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [notification, setNotification] = useState({
     open: false,
     message: '',
@@ -55,7 +57,15 @@ const StageDetail = () => {
     fetchStageDetails();
   }, [id]);
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteConfirm = async () => {
     try {
       const response = await apiRequest('DELETE', `/stages/${id}`);
       if (response) {
@@ -78,6 +88,8 @@ const StageDetail = () => {
         message: err.message || 'An error occurred while deleting stage',
         severity: 'error'
       });
+    } finally {
+      setDeleteDialogOpen(false);
     }
   };
 
@@ -165,7 +177,7 @@ const StageDetail = () => {
                 >
                   Edit Stage
                 </Button>
-                <Button variant="contained" color="error" startIcon={<DeleteOutlined />} onClick={handleDelete}>
+                <Button variant="contained" color="error" startIcon={<DeleteOutlined />} onClick={handleDeleteClick}>
                   Delete Stage
                 </Button>
               </Stack>
@@ -355,6 +367,14 @@ const StageDetail = () => {
           </Box>
         </>
       )}
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={stage?.title || stage?.stage_id}
+        itemType="stage"
+      />
 
       <CustomSnackbar
         open={notification.open}

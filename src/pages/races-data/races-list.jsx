@@ -5,11 +5,6 @@ import {
   Button,
   IconButton,
   Tooltip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   TextField,
   InputAdornment,
   Stack
@@ -19,6 +14,7 @@ import apiRequest from '../../api/api-utils';
 import { DeleteOutlined, EditOutlined, EyeOutlined, UserAddOutlined, SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import CustomTable from '../table/custom-table';
 import CustomSnackbar from '../custom-snackbar';
+import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
 const RaceList = () => {
   const navigate = useNavigate();
@@ -311,18 +307,13 @@ const RaceList = () => {
       />
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel} fullWidth maxWidth="xs">
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Are you sure you want to delete race: {selectedRace?.race}? This action cannot be undone.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel}>Cancel</Button>
-          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title={selectedRace?.race}
+        itemType="race"
+      />
 
       {/* Using custom snackbar component */}
       <CustomSnackbar open={snackbar.open} message={snackbar.message} severity={snackbar.severity} onClose={handleCloseSnackbar} />
