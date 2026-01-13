@@ -1,6 +1,4 @@
 import { lazy } from 'react';
-
-// project imports
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
@@ -18,19 +16,11 @@ import StageDetail from '../pages/stages-data/stage-detail';
 import StageForm from '../pages/stages-data/create-edit';
 import RaceMerging from '../pages/merge-data/racemerging';
 import TeamMerging from '../pages/merge-data/teammerging';
-
-// render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
-
-// render - color
 const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
-
-// render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
-
-// ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
   path: '/',

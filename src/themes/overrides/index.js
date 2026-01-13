@@ -1,7 +1,4 @@
-// third-party
 import { merge } from 'lodash-es';
-
-// project imports
 import Badge from './Badge';
 import Button from './Button';
 import ButtonBase from './ButtonBase';
@@ -25,8 +22,6 @@ import TableRow from './TableRow';
 import Tabs from './Tabs';
 import Tooltip from './Tooltip';
 import Typography from './Typography';
-
-// ==============================|| OVERRIDES - MAIN ||============================== //
 
 export default function ComponentsOverrides(theme) {
   return merge(

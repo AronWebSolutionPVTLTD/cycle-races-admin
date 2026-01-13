@@ -1,4 +1,3 @@
-// assets
 import {
   AppstoreAddOutlined,
   AntDesignOutlined,
@@ -8,7 +7,6 @@ import {
   LoadingOutlined
 } from '@ant-design/icons';
 
-// icons
 const icons = {
   FontSizeOutlined,
   BgColorsOutlined,
@@ -18,7 +16,6 @@ const icons = {
   AppstoreAddOutlined
 };
 
-// ==============================|| MENU ITEMS - UTILITIES ||============================== //
 
 const utilities = {
   id: 'utilities',

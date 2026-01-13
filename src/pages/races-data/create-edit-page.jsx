@@ -39,11 +39,6 @@ const defaultCountryCodes = [
   { code: 'us', label: 'United States' }
 ];
 
-/**
- * Reusable form component for creating and editing races
- * @param {Object} props - Component props
- * @param {string} props.mode - 'create' or 'edit' mode
- */
 const RaceForm = ({ mode = 'create' }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -56,8 +51,6 @@ const RaceForm = ({ mode = 'create' }) => {
   const [stageErrors, setStageErrors] = useState([]);
   const [countryCodes, setCountryCodes] = useState(defaultCountryCodes);
   const [loadingCountries, setLoadingCountries] = useState(false);
-
-  // Snackbar states
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -74,8 +67,6 @@ const RaceForm = ({ mode = 'create' }) => {
     class: '1.HC',
     is_stage_race: false
   });
-
-  // Initialize stages array
   const [stages, setStages] = useState([
     {
       stage_id: '',
@@ -85,16 +76,12 @@ const RaceForm = ({ mode = 'create' }) => {
       distance: ''
     }
   ]);
-
-  // Handle snackbar close
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setSnackbar({ ...snackbar, open: false });
   };
-
-  // Show snackbar message
   const showMessage = (message, severity = 'success') => {
     setSnackbar({
       open: true,
@@ -143,8 +130,6 @@ const RaceForm = ({ mode = 'create' }) => {
               date: dateObj,
               country_code: formattedCountryCode
             });
-
-            // If it's a stage race, fetch its stages
             if (response.data.is_stage_race) {
               try {
                 const stagesResponse = await apiRequest('GET', `/stages/race/${id}`);
@@ -169,7 +154,6 @@ const RaceForm = ({ mode = 'create' }) => {
     }
   }, [isEditMode, id, currentYear]);
 
-  // Handle form field changes
   const handleChange = useCallback(
     (e) => {
       const { name, value } = e.target;
@@ -177,8 +161,6 @@ const RaceForm = ({ mode = 'create' }) => {
         ...prev,
         [name]: value
       }));
-
-      // Clear field-specific error when user types
       if (formErrors[name]) {
         setFormErrors((prev) => ({
           ...prev,
@@ -189,15 +171,12 @@ const RaceForm = ({ mode = 'create' }) => {
     [formErrors]
   );
 
-  // Handle date picker change
   const handleDateChange = useCallback(
     (date) => {
       setFormData((prev) => ({
         ...prev,
         date: date
       }));
-
-      // Clear date error
       if (formErrors.date) {
         setFormErrors((prev) => ({
           ...prev,
@@ -208,15 +187,12 @@ const RaceForm = ({ mode = 'create' }) => {
     [formErrors]
   );
 
-  // Handle switch change
   const handleSwitchChange = useCallback((e) => {
     const { name, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: checked
     }));
-
-    // If turning off stage race mode, reset stages to just one default stage
     if (name === 'is_stage_race' && !checked) {
       setStages([
         {
@@ -230,18 +206,14 @@ const RaceForm = ({ mode = 'create' }) => {
     }
   }, []);
 
-  // Handle year change
   const handleYearChange = useCallback(
     (e) => {
       const { value } = e.target;
-      // Only allow years between 1800 and current year + 10
       if (value === '' || (parseInt(value) >= 1800 && parseInt(value) <= currentYear + 10)) {
         setFormData((prev) => ({
           ...prev,
           year: value === '' ? '' : parseInt(value)
         }));
-
-        // Clear year error
         if (formErrors.year) {
           setFormErrors((prev) => ({
             ...prev,
@@ -253,12 +225,9 @@ const RaceForm = ({ mode = 'create' }) => {
     [currentYear, formErrors]
   );
 
-  // Handle stage field changes
   const handleStageChange = useCallback(
     (index, field, value) => {
       setStages((prevStages) => prevStages.map((stage, i) => (i === index ? { ...stage, [field]: value } : stage)));
-
-      // Clear stage-specific error when user types
       if (stageErrors[index]?.[field]) {
         setStageErrors((prev) => {
           const newErrors = [...prev];
@@ -272,7 +241,6 @@ const RaceForm = ({ mode = 'create' }) => {
     [stageErrors]
   );
 
-  // Add a new stage
   const addStage = useCallback(() => {
     setStages((prev) => [
       ...prev,
@@ -286,15 +254,12 @@ const RaceForm = ({ mode = 'create' }) => {
     ]);
   }, []);
 
-  // Remove a stage
   const removeStage = useCallback((indexToRemove) => {
     setStages((prev) => {
-      // Filter out the removed stage
       const filteredStages = prev.filter((_, index) => index !== indexToRemove);
       return filteredStages;
     });
 
-    // Also remove any errors for this stage
     setStageErrors((prev) => {
       const newErrors = [...prev];
       newErrors.splice(indexToRemove, 1);
@@ -302,7 +267,6 @@ const RaceForm = ({ mode = 'create' }) => {
     });
   }, []);
 
-  // Form validation
   const validateForm = useCallback(() => {
     const errors = {};
 
@@ -317,8 +281,6 @@ const RaceForm = ({ mode = 'create' }) => {
     if (!formData.class) errors.class = 'Classification is required';
 
     setFormErrors(errors);
-
-    // Validate stages if this is a stage race
     let stagesValid = true;
     if (formData.is_stage_race) {
       const newStageErrors = stages.map((stage) => {
@@ -339,7 +301,6 @@ const RaceForm = ({ mode = 'create' }) => {
     return Object.keys(errors).length === 0 && stagesValid;
   }, [formData, stages, currentYear]);
 
-  // Format date for API submission (DD.MM format)
   const formatDateForApi = (dateObj) => {
     if (!dateObj) return null;
 
@@ -349,18 +310,14 @@ const RaceForm = ({ mode = 'create' }) => {
     return `${day}.${month}`;
   };
 
-  // Format stages data for API submission
   const formatStagesForApi = (stagesData) => {
     return stagesData.map((stage) => ({
       ...stage,
-      // Convert stage_number to number
       stage_number: parseInt(stage.stage_number),
-      // Ensure distance is a number
       distance: parseFloat(stage.distance)
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -370,7 +327,6 @@ const RaceForm = ({ mode = 'create' }) => {
       setSubmitting(true);
       setError(null);
 
-      // Transform data before sending
       const dataToSubmit = {
         ...formData,
         date: formatDateForApi(formData.date),
@@ -389,11 +345,8 @@ const RaceForm = ({ mode = 'create' }) => {
         showMessage('Race created successfully');
       }
 
-      // If it's a stage race, save the stages
       if (formData.is_stage_race && raceId) {
         const formattedStages = formatStagesForApi(stages);
-
-        // For existing stages (in edit mode), update them
         for (const stage of formattedStages) {
           const stageData = {
             ...stage,
@@ -402,18 +355,14 @@ const RaceForm = ({ mode = 'create' }) => {
           };
 
           if (stage._id || stage.id) {
-            // Update existing stage
             await apiRequest('PUT', `/stages/${stage._id || stage.id}`, stageData);
           } else {
-            // Create new stage
             await apiRequest('POST', '/stages', stageData);
           }
         }
 
         showMessage('Race and stages saved successfully');
       }
-
-      // Navigate after short delay to show success message
       setTimeout(() => {
         navigate('/races-list');
       }, 1500);
@@ -422,7 +371,6 @@ const RaceForm = ({ mode = 'create' }) => {
       setError(errorMessage);
       showMessage(errorMessage, 'error');
 
-      // Handle validation errors from backend
       if (err.errors) {
         const backendErrors = {};
         Object.entries(err.errors).forEach(([field, message]) => {
@@ -435,7 +383,6 @@ const RaceForm = ({ mode = 'create' }) => {
     }
   };
 
-  // Handle cancel button
   const handleCancel = () => {
     navigate('/races-list');
   };
@@ -677,7 +624,6 @@ const RaceForm = ({ mode = 'create' }) => {
         </Box>
       </Box>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

@@ -1,11 +1,7 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
-
-// material-ui
 import MuiIconButton from '@mui/material/IconButton';
 import { alpha, styled } from '@mui/material/styles';
-
-// project imports
 import getColors from 'utils/getColors';
 import getShadow from 'utils/getShadow';
 

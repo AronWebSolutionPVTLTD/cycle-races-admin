@@ -1,15 +1,12 @@
 import { useState } from 'react';
 
-// material-ui
 import Grid from '@mui/material/Grid2';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-// project imports
 import SalesChart from 'sections/dashboard/SalesChart';
 
-// sales report status
 const status = [
   {
     value: 'today',
@@ -25,7 +22,6 @@ const status = [
   }
 ];
 
-// ==============================|| DEFAULT - SALES REPORT ||============================== //
 
 export default function SaleReportCard() {
   const [value, setValue] = useState('today');

@@ -53,7 +53,6 @@ const RaceDetailPage = () => {
         message: 'Race deleted successfully',
         severity: 'success'
       });
-      // Navigate back to races list after successful deletion
       setTimeout(() => navigate('/races-list'), 1500);
     } catch (err) {
       setSnackbar({
@@ -147,9 +146,7 @@ const RaceDetailPage = () => {
 
         <Divider sx={{ my: 2 }} />
 
-        {/* Replacing Grid with Box layout */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 3 }}>
-          {/* Left column */}
           <Box sx={{ flex: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <CalendarOutlined sx={{ mr: 1 }} color="primary" />
@@ -173,7 +170,6 @@ const RaceDetailPage = () => {
             </Box>
           </Box>
 
-          {/* Right column */}
           <Box sx={{ flex: 1 }}>
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1">

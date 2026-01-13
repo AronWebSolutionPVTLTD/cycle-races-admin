@@ -5,8 +5,6 @@ import Grid from '@mui/material/Grid2';
 
 const MonthlyLineChart = ({ monthlyData }) => {
   const theme = useTheme();
-
-  // If no data, show loading or empty state
   if (!monthlyData) {
     return (
       <Container maxWidth="xl" sx={{ py: { xs: 2, md: 4 }, px: { xs: 2, md: 3 } }}>
@@ -40,10 +38,7 @@ const MonthlyLineChart = ({ monthlyData }) => {
     );
   }
 
-  // Extract the data from the API response
   const data = monthlyData.data || monthlyData;
-
-  // Validate data structure
   if (!data.monthlyRaceByMonth && !data.monthlyRiderByMonth && !data.monthlyTeamByMonth) {
     return (
       <Container maxWidth="xl" sx={{ py: { xs: 2, md: 4 }, px: { xs: 2, md: 3 } }}>
@@ -69,7 +64,6 @@ const MonthlyLineChart = ({ monthlyData }) => {
     );
   }
 
-  // Extract months and prepare data
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const fullMonths = [
     'January',
@@ -86,26 +80,21 @@ const MonthlyLineChart = ({ monthlyData }) => {
     'December'
   ];
 
-  // Prepare data series with safe access from actual API data
   const raceData = fullMonths.map((month) => data.monthlyRaceByMonth?.[month] || 0);
   const riderData = fullMonths.map((month) => data.monthlyRiderByMonth?.[month] || 0);
   const teamData = fullMonths.map((month) => data.monthlyTeamByMonth?.[month] || 0);
 
-  // Calculate totals and analytics
   const totalRaces = raceData.reduce((sum, val) => sum + val, 0);
   const totalRiders = riderData.reduce((sum, val) => sum + val, 0);
   const totalTeams = teamData.reduce((sum, val) => sum + val, 0);
 
-  // Calculate averages
   const avgRaces = Math.round(totalRaces / 12);
   const avgRiders = Math.round(totalRiders / 12);
   const avgTeams = Math.round(totalTeams / 12);
 
-  // Find peak months
   const peakRaceMonth = months[raceData.indexOf(Math.max(...raceData))];
   const peakRiderMonth = months[riderData.indexOf(Math.max(...riderData))];
 
-  // Responsive chart configuration
   const getChartConfig = () => ({
     series: [
       {
@@ -162,7 +151,6 @@ const MonthlyLineChart = ({ monthlyData }) => {
     }
   });
 
-  // Summary card data
   const summaryCards = [
     {
       title: 'Total Races',
@@ -189,7 +177,6 @@ const MonthlyLineChart = ({ monthlyData }) => {
 
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2, md: 3 } }}>
-      {/* Header Section */}
       <Box sx={{ mb: { xs: 3, md: 4 }, textAlign: 'center' }}>
         <Typography
           variant="h3"
@@ -202,19 +189,7 @@ const MonthlyLineChart = ({ monthlyData }) => {
           Current Year Overview
         </Typography>
 
-        {/* <Divider
-          sx={{
-            mt: 1,
-            mb: { xs: 3, md: 4 },
-            maxWidth: { xs: 150, md: 200 },
-            mx: 'auto',
-            height: 2,
-            backgroundColor: theme.palette.primary.main
-          }}
-        /> */}
       </Box>
-
-      {/* Summary Cards */}
       <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mb: { xs: 3, md: 4 } }}>
         {summaryCards.map((card, index) => (
           <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -285,7 +260,6 @@ const MonthlyLineChart = ({ monthlyData }) => {
         ))}
       </Grid>
 
-      {/* Line Chart */}
       <Card
         elevation={2}
         sx={{
@@ -312,7 +286,6 @@ const MonthlyLineChart = ({ monthlyData }) => {
             </Typography>
           </Box>
 
-          {/* Responsive Chart Container */}
           <Box
             sx={{
               width: '100%',
@@ -343,46 +316,6 @@ const MonthlyLineChart = ({ monthlyData }) => {
               }}
             />
           </Box>
-
-          {/* Insights Section */}
-          {/* <Divider sx={{ my: { xs: 2, md: 3 } }} />
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" color="primary" sx={{ fontWeight: 600, mb: 2, fontSize: { xs: '1rem', md: '1.25rem' } }}>
-              Key Insights
-            </Typography>
-            <Grid container spacing={{ xs: 1, md: 2 }} justifyContent="center">
-              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Box sx={{ p: { xs: 1.5, md: 2 }, backgroundColor: '#f8f9fa', borderRadius: 1 }}>
-                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
-                    Highest Activity
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-                    {peakRaceMonth} (Races)
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Box sx={{ p: { xs: 1.5, md: 2 }, backgroundColor: '#f8f9fa', borderRadius: 1 }}>
-                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
-                    Monthly Average
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-                    {Math.round((totalRaces + totalRiders + totalTeams) / 36).toLocaleString()} Combined
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Box sx={{ p: { xs: 1.5, md: 2 }, backgroundColor: '#f8f9fa', borderRadius: 1 }}>
-                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
-                    Data Points
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-                    36 Metrics Tracked
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box> */}
         </CardContent>
       </Card>
     </Container>

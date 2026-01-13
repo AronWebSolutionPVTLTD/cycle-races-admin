@@ -1,4 +1,3 @@
-// ==============================|| OVERRIDES - TOOLTIP ||============================== //
 
 export default function Tooltip(theme) {
   return {

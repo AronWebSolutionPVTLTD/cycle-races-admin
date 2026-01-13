@@ -40,8 +40,6 @@ const TeamDetail = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  // State management
   const [team, setTeam] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,23 +53,17 @@ const TeamDetail = () => {
     riderCountry: '',
     riderAge: ''
   });
-
-  // Rider selection states
   const [availableRiders, setAvailableRiders] = useState([]);
   const [ridersLoading, setRidersLoading] = useState(false);
   const [selectedRider, setSelectedRider] = useState(null);
   const [riderSearchTerm, setRiderSearchTerm] = useState('');
   const [riderPage, setRiderPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
     severity: 'info'
   });
-
-  // Show snackbar function
   const showSnackbar = useCallback((message, severity = 'info') => {
     setSnackbar({
       open: true,
@@ -80,7 +72,6 @@ const TeamDetail = () => {
     });
   }, []);
 
-  // Close snackbar function
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -103,7 +94,6 @@ const TeamDetail = () => {
     }
   }, [id, showSnackbar]);
 
-  // Fetch available riders for dropdown
   const fetchRiders = useCallback(async () => {
     setRidersLoading(true);
     try {
@@ -117,8 +107,6 @@ const TeamDetail = () => {
           search: riderSearchTerm || undefined
         }
       );
-
-      // Filter out riders already in the team
       const existingRiderIds = team?.riders?.map((rider) => rider.rider_id) || [];
       const filteredRiders = data.data.filter((rider) => !existingRiderIds.includes(rider._id));
 
@@ -134,14 +122,12 @@ const TeamDetail = () => {
     fetchTeam();
   }, [fetchTeam]);
 
-  // Fetch riders when opening the dialog
   useEffect(() => {
     if (addRiderDialogOpen) {
       fetchRiders();
     }
   }, [addRiderDialogOpen, fetchRiders]);
 
-  // Update rider search results when search term changes
   useEffect(() => {
     if (addRiderDialogOpen) {
       const delayDebounceFn = setTimeout(() => {
@@ -176,7 +162,7 @@ const TeamDetail = () => {
     try {
       await apiRequest('DELETE', `/teams/${id}/${riderToRemove.rider_id}`);
       showSnackbar(`${riderToRemove.riderName || 'Rider'} removed successfully`, 'success');
-      fetchTeam(); // Refresh data
+      fetchTeam();
     } catch (err) {
       const errorMessage = err.message || 'Failed to remove rider';
       showSnackbar(errorMessage, 'error');
@@ -187,7 +173,6 @@ const TeamDetail = () => {
   };
 
   const handleAddRider = async () => {
-    // Only the rider_id field is actually required
     if (!newRider.rider_id) {
       showSnackbar('Please select a rider', 'error');
       return;
@@ -199,7 +184,7 @@ const TeamDetail = () => {
       setAddRiderDialogOpen(false);
       setNewRider({ rider_id: '', riderName: '', riderCountry: '', riderAge: '' });
       setSelectedRider(null);
-      fetchTeam(); // Refresh data
+      fetchTeam();
     } catch (err) {
       const errorMessage = err.message || 'Failed to add rider';
       showSnackbar(errorMessage, 'error');
@@ -211,7 +196,6 @@ const TeamDetail = () => {
     setNewRider((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle rider selection from dropdown
   const handleRiderSelect = (event, value) => {
     if (value) {
       setSelectedRider(value);
@@ -232,7 +216,6 @@ const TeamDetail = () => {
     }
   };
 
-  // Reset the form when dialog closes
   const handleCloseRiderDialog = () => {
     setAddRiderDialogOpen(false);
     setSelectedRider(null);
@@ -487,7 +470,6 @@ const TeamDetail = () => {
         </Paper>
       )}
 
-      {/* Delete Team Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
@@ -497,7 +479,6 @@ const TeamDetail = () => {
         dialogTitle="Delete Team"
       />
 
-      {/* Remove Rider Confirmation Dialog */}
       <Dialog open={removeRiderDialogOpen} onClose={() => setRemoveRiderDialogOpen(false)} fullWidth maxWidth="xs">
         <DialogTitle>Remove Rider</DialogTitle>
         <DialogContent>
@@ -511,7 +492,6 @@ const TeamDetail = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Add Rider Dialog with Search */}
       <Dialog open={addRiderDialogOpen} onClose={handleCloseRiderDialog} fullWidth maxWidth="sm">
         <DialogTitle>Add Rider to Team</DialogTitle>
         <DialogContent>
@@ -634,7 +614,6 @@ const TeamDetail = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

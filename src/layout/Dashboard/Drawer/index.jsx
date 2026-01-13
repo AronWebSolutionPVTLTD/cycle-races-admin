@@ -1,29 +1,19 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-
-// project imports
 import DrawerHeader from './DrawerHeader';
 import DrawerContent from './DrawerContent';
 import MiniDrawerStyled from './MiniDrawerStyled';
-
 import { DRAWER_WIDTH } from 'config';
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
-
-// ==============================|| MAIN LAYOUT - DRAWER ||============================== //
 
 export default function MainDrawer({ window }) {
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
   const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-
-  // responsive drawer container
   const container = window !== undefined ? () => window().document.body : undefined;
-
-  // header content
   const drawerContent = useMemo(() => <DrawerContent />, []);
   const drawerHeader = useMemo(() => <DrawerHeader open={drawerOpen} />, [drawerOpen]);
 

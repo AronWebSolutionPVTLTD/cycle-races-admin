@@ -97,7 +97,6 @@ const StageDetail = () => {
     setNotification({ ...notification, open: false });
   };
 
-  // Extract start and finish from subtitle if available
   const extractRouteInfo = (subTitle) => {
     if (!subTitle) return { start: 'N/A', finish: 'N/A' };
 
@@ -111,7 +110,6 @@ const StageDetail = () => {
     return { start: 'N/A', finish: 'N/A' };
   };
 
-  // Custom date formatter
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
 
@@ -184,7 +182,6 @@ const StageDetail = () => {
             </Box>
           </Paper>
 
-          {/* Cards Container using Flexbox instead of Grid */}
           <Box
             sx={{
               display: 'flex',
@@ -192,7 +189,6 @@ const StageDetail = () => {
               gap: 3
             }}
           >
-            {/* Stage Details Card */}
             <Card sx={{ flex: 1, boxShadow: 2 }}>
               <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} mb={2}>
@@ -274,7 +270,6 @@ const StageDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Race Details Card */}
             <Card sx={{ flex: 1, boxShadow: 2 }}>
               <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} mb={2}>

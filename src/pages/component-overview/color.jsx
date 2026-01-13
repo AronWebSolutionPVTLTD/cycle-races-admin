@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
-// material-ui
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid2';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-// project imports
 import MainCard from 'components/MainCard';
 
 function ColorBox({ bgcolor, title, data, dark, main }) {
@@ -44,8 +41,6 @@ function ColorBox({ bgcolor, title, data, dark, main }) {
     </Card>
   );
 }
-
-// ===============================|| COMPONENT - COLOR ||=============================== //
 
 export default function ComponentColor() {
   return (

@@ -1,12 +1,8 @@
 import { forwardRef } from 'react';
-
-// material-ui
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
-
-// header style
 const headerSX = {
   p: 2.5,
   '& .MuiCardHeader-action': { m: '0px auto', alignSelf: 'center' }
@@ -62,26 +58,14 @@ const MainCard = forwardRef(function MainCard(
       ref={ref}
       {...others}
     >
-      {/* card header and action */}
       {!darkTitle && title && (
         <CardHeader sx={headerSX} slotProps={{ title: { variant: 'subtitle1' } }} title={title} action={secondary} subheader={subheader} />
       )}
-
-      {/* content & header divider */}
       {title && divider && <Divider />}
 
-      {/* card content */}
       {content && <CardContent sx={contentSX}>{children}</CardContent>}
       {!content && children}
-
-      {/* card footer - clipboard & highlighter  */}
-      {/* {codeString && (
-        <>
-          <Divider sx={{ borderStyle: 'dashed' }} />
-          <Highlighter codeString={codeString} codeHighlight={codeHighlight} />
-        </>
-      )} */}
-    </Card>
+ </Card>
   );
 });
 

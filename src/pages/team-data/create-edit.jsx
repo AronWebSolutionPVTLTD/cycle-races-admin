@@ -8,7 +8,6 @@ import CustomTable from '../table/custom-table';
 const TeamForm = ({ mode = 'create' }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  //   const isEditMode = Boolean(id);
   const isEditMode = mode === 'edit';
   const currentYear = new Date().getFullYear();
 
@@ -29,17 +28,11 @@ const TeamForm = ({ mode = 'create' }) => {
   const [availableRiders, setAvailableRiders] = useState([]);
   const [selectedRiderIds, setSelectedRiderIds] = useState([]);
   const [tableLoading, setTableLoading] = useState(false);
-
-  // Add pagination states for available riders
   const [availableRidersPage, setAvailableRidersPage] = useState(0);
   const [availableRidersRowsPerPage, setAvailableRidersRowsPerPage] = useState(10);
   const [totalAvailableRiders, setTotalAvailableRiders] = useState(0);
-
-  // Add pagination states for team riders
   const [teamRidersPage, setTeamRidersPage] = useState(0);
   const [teamRidersRowsPerPage, setTeamRidersRowsPerPage] = useState(10);
-
-  // Table columns configuration for team riders
   const teamRiderColumns = [
     { id: 'riderName', label: 'Rider Name', minWidth: 170 },
     { id: 'riderCountry', label: 'Country', minWidth: 120 },
@@ -66,7 +59,6 @@ const TeamForm = ({ mode = 'create' }) => {
     }
   ];
 
-  // Table columns configuration for available riders with checkboxes
   const availableRiderColumns = [
     {
       id: 'select',
@@ -92,7 +84,6 @@ const TeamForm = ({ mode = 'create' }) => {
     }
   ];
 
-  // Function to fetch available riders with pagination
   const fetchAvailableRiders = async () => {
     setTableLoading(true);
     try {
@@ -101,7 +92,7 @@ const TeamForm = ({ mode = 'create' }) => {
         '/riders',
         {},
         {
-          page: availableRidersPage + 1, // API typically uses 1-based page index
+          page: availableRidersPage + 1, 
           limit: availableRidersRowsPerPage
         }
       );
@@ -120,19 +111,16 @@ const TeamForm = ({ mode = 'create' }) => {
   };
 
   useEffect(() => {
-    // Fetch available riders with pagination
     if (!isEditMode) {
       fetchAvailableRiders();
     }
 
-    // If in edit mode, fetch team data
     if (isEditMode) {
       const fetchTeam = async () => {
         setLoading(true);
         try {
           const response = await apiRequest('GET', `/teams/${id}`);
           if (response.data) {
-            // Format the data according to the API response structure
             const teamData = response.data;
             setTeam({
               teamName: teamData.teamName || '',
@@ -141,7 +129,6 @@ const TeamForm = ({ mode = 'create' }) => {
               riders: Array.isArray(teamData.riders)
                 ? teamData.riders.map((rider) => ({
                     ...rider,
-                    // Ensure rider_id is present (might be _id or rider_id)
                     rider_id: rider.rider_id || rider._id
                   }))
                 : []
@@ -209,7 +196,7 @@ const TeamForm = ({ mode = 'create' }) => {
     }
 
     const newRiders = selectedRiderIds
-      .filter((riderId) => !team.riders.some((r) => r.rider_id === riderId)) // Filter out already added riders
+      .filter((riderId) => !team.riders.some((r) => r.rider_id === riderId)) 
       .map((riderId) => {
         const rider = availableRiders.find((r) => r._id === riderId);
         if (!rider) return null;
@@ -221,7 +208,7 @@ const TeamForm = ({ mode = 'create' }) => {
           riderAge: calculateAge(rider.dateOfBirth)
         };
       })
-      .filter(Boolean); // Remove any null values
+      .filter(Boolean); 
 
     if (newRiders.length === 0) {
       showSnackbar('Selected riders are already added to the team', 'warning');
@@ -233,7 +220,6 @@ const TeamForm = ({ mode = 'create' }) => {
       riders: [...prev.riders, ...newRiders]
     }));
 
-    // Clear selections after adding
     setSelectedRiderIds([]);
     showSnackbar(`Added ${newRiders.length} rider(s) to team`, 'success');
   };
@@ -246,7 +232,6 @@ const TeamForm = ({ mode = 'create' }) => {
     showSnackbar(`Rider remove from the team.`, 'success');
   };
 
-  // Handle pagination for available riders
   const handleAvailableRidersPageChange = (event, newPage) => {
     setAvailableRidersPage(newPage);
   };
@@ -256,7 +241,6 @@ const TeamForm = ({ mode = 'create' }) => {
     setAvailableRidersPage(0);
   };
 
-  // Handle pagination for team riders
   const handleTeamRidersPageChange = (event, newPage) => {
     setTeamRidersPage(newPage);
   };
@@ -299,7 +283,6 @@ const TeamForm = ({ mode = 'create' }) => {
     }
   };
 
-  // Get paginated team riders
   const getPaginatedTeamRiders = () => {
     const start = teamRidersPage * teamRidersRowsPerPage;
     const end = start + teamRidersRowsPerPage;
@@ -314,7 +297,6 @@ const TeamForm = ({ mode = 'create' }) => {
 
       <form onSubmit={handleSubmit}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {/* Team details section */}
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <TextField
               fullWidth
@@ -353,14 +335,12 @@ const TeamForm = ({ mode = 'create' }) => {
             />
           </Box>
 
-          {/* Riders Section */}
           <Box sx={{ mt: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 500 }}>
               Team Riders
             </Typography>
             <Divider sx={{ mb: 2 }} />
 
-            {/* Team riders table - for both create and edit modes */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="subtitle1" gutterBottom>
                 Current Team Riders
@@ -387,7 +367,6 @@ const TeamForm = ({ mode = 'create' }) => {
               )}
             </Box>
 
-            {/* Available riders section with checkboxes */}
             {!isEditMode && (
               <Box sx={{ mt: 4 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -416,7 +395,6 @@ const TeamForm = ({ mode = 'create' }) => {
             )}
           </Box>
 
-          {/* Action buttons */}
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
             <Button variant="outlined" onClick={() => navigate('/teams')} sx={{ px: 3 }}>
               Cancel

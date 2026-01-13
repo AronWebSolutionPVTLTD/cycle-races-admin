@@ -1,6 +1,5 @@
 import Flag from 'react-world-flags';
 
-// Enhanced flag rendering with error handling
 export const renderFlag = (code) => {
   if (!code || typeof code !== 'string') {
     return <div style={{ width: '30px', height: '20px', marginRight: '10px', backgroundColor: '#f0f0f0' }} />;

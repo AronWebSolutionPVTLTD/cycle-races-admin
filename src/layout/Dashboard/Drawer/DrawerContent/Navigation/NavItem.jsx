@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import { Link, useLocation, matchPath } from 'react-router-dom';
-
-// material-ui
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
@@ -10,13 +8,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-// project imports
 import IconButton from 'components/@extended/IconButton';
-
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
-
-// ==============================|| NAVIGATION - LIST ITEM ||============================== //
 
 export default function NavItem({ item, level, isParents = false, setSelectedID }) {
   const { menuMaster } = useGetMenuMaster();

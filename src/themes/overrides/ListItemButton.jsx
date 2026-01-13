@@ -1,4 +1,3 @@
-// ==============================|| OVERRIDES - LIST ITEM ICON ||============================== //
 
 export default function ListItemButton(theme) {
   return {

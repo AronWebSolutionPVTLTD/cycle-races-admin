@@ -18,7 +18,7 @@ export const ModernRecentRiders = ({ riders }) => {
         <Typography variant="h6" fontWeight={600}>
           Recent Riders
         </Typography>
-     </Stack>
+      </Stack>
 
       <Stack spacing={2}>
         {riders.map((rider, index) => (

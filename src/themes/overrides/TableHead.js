@@ -1,4 +1,3 @@
-// ==============================|| OVERRIDES - TABLE CELL ||============================== //
 
 export default function TableHead(theme) {
   return {

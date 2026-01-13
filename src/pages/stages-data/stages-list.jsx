@@ -25,16 +25,12 @@ import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 const StageManagement = () => {
   const navigate = useNavigate();
   const [stages, setStages] = useState([]);
-
-  // Race dropdown states
   const [races, setRaces] = useState([]);
   const [racesLoading, setRacesLoading] = useState(false);
   const [racesPage, setRacesPage] = useState(1);
-  const [racesLimit] = useState(50); // Load more races at once for dropdown
+  const [racesLimit] = useState(50);
   const [totalRaces, setTotalRaces] = useState(0);
   const [allRacesLoaded, setAllRacesLoaded] = useState(false);
-
-  // Stages states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
@@ -52,7 +48,6 @@ const StageManagement = () => {
     severity: 'success'
   });
 
-  // Debouncing search query
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
@@ -63,7 +58,6 @@ const StageManagement = () => {
     };
   }, [searchQuery]);
 
-  // Format date
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
 
@@ -82,7 +76,6 @@ const StageManagement = () => {
     }
   };
 
-  // Fetch races for dropdown with pagination
   const fetchRaces = useCallback(
     async (loadMore = false) => {
       if (allRacesLoaded && !loadMore) return;
@@ -97,15 +90,12 @@ const StageManagement = () => {
         const response = await apiRequest('GET', '/races', {}, params);
 
         if (response.data) {
-          // If loading more, append to existing races, otherwise replace
           if (loadMore) {
             setRaces((prev) => [...prev, ...response.data]);
             setRacesPage((prev) => prev + 1);
           } else {
             setRaces(response.data);
           }
-
-          // Update total count and check if all races are loaded
           if (response.totalRaces) {
             setTotalRaces(response.totalRaces);
             setAllRacesLoaded(races.length + response.data.length >= response.totalRaces);
@@ -120,17 +110,13 @@ const StageManagement = () => {
     [racesPage, racesLimit, races.length, allRacesLoaded]
   );
 
-  // Load more races when scrolling dropdown
   const handleRaceDropdownScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.target;
-
-    // If scrolled near bottom and not already loading or all loaded
     if (scrollHeight - scrollTop - clientHeight < 50 && !racesLoading && !allRacesLoaded) {
       fetchRaces(true);
     }
   };
 
-  // Fetch stages based on selected race or all stages with search
   const fetchStages = useCallback(async () => {
     setLoading(true);
     try {
@@ -140,46 +126,36 @@ const StageManagement = () => {
         limit: rowsPerPage
       };
 
-      // Add search query if present
       if (debouncedSearchQuery) {
         params.search = debouncedSearchQuery;
       }
 
-      // If a specific race is selected, use the race-specific endpoint
       if (selectedRaceId !== 'all') {
         endpoint = `/stages/race/${selectedRaceId}`;
       }
 
       const response = await apiRequest('GET', endpoint, {}, params);
-
-      // Check the status field from the API response
       if (response && response.status === false) {
-        // This is a "no data found" case, not an actual error
         setStages([]);
         setTotalCount(0);
         setError({ message: response.message || 'No stages found' });
-
-        // Show notification for no stages
         setNotification({
           open: true,
           message: response.message || 'No stages found',
-          severity: 'info' // Use info severity for "no data" cases
+          severity: 'info'
         });
       } else if (response && response.data) {
-        // Success case - we have data
         setStages(response.data);
         setError(null);
 
-        // Set total count from response
         if (response.totalstages) {
           setTotalCount(response.totalstages);
         } else if (response.data.length > 0 && response.data[0].totalstages) {
           setTotalCount(response.data[0].totalstages);
         } else {
-          setTotalCount(response.data.length); // Fallback to current page count
+          setTotalCount(response.data.length);
         }
       } else {
-        // Unknown response format
         setStages([]);
         setTotalCount(0);
         setError({ message: 'Invalid response from server' });
@@ -188,8 +164,6 @@ const StageManagement = () => {
       console.error('API Error:', err);
       setStages([]);
       setTotalCount(0);
-
-      // Extract error message from response if available
       const errorMessage = err.response?.data?.message || err.message || 'An error occurred while fetching stages';
 
       setError({ message: errorMessage });
@@ -203,7 +177,6 @@ const StageManagement = () => {
     }
   }, [page, rowsPerPage, selectedRaceId, debouncedSearchQuery]);
 
-  // Initialize by fetching races and stages
   useEffect(() => {
     fetchRaces();
   }, [fetchRaces]);
@@ -227,8 +200,6 @@ const StageManagement = () => {
 
     try {
       const response = await apiRequest('DELETE', `/stages/${selectedStage._id}`);
-
-      // Check if the response has a status field
       if (response && response.status === false) {
         setNotification({
           open: true,
@@ -266,14 +237,13 @@ const StageManagement = () => {
 
   const handleRaceChange = (event) => {
     setSelectedRaceId(event.target.value);
-    setPage(0); // Reset pagination when changing races
-    // Clear any previous errors
+    setPage(0);
     setError(null);
   };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
-    setPage(0); // Reset to first page when searching
+    setPage(0);
   };
 
   const handleRowClick = (row) => {
@@ -288,7 +258,6 @@ const StageManagement = () => {
     navigate(`/stage/${row._id}/edit`);
   };
 
-  // Format race name with year
   const formatRaceName = (race) => {
     if (!race) return 'N/A';
     if (typeof race === 'object') {
@@ -397,9 +366,7 @@ const StageManagement = () => {
         </Stack>
       </Stack>
 
-      {/* Filters and search */}
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} mb={3} alignItems="flex-start" width="100%">
-        {/* Race filter */}
         <FormControl variant="outlined" size="small" sx={{ minWidth: { xs: '100%', md: 250 } }}>
           <InputLabel id="race-select-label">Filter by Race</InputLabel>
           <Select
@@ -428,7 +395,6 @@ const StageManagement = () => {
           </Select>
         </FormControl>
 
-        {/* Search field */}
         <TextField
           placeholder="Search stages..."
           variant="outlined"
@@ -460,7 +426,6 @@ const StageManagement = () => {
         onRowClick={handleRowClick}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}

@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
-// project imports
 import MainCard from 'components/MainCard';
-
-// ==============================|| AUTHENTICATION - CARD WRAPPER ||============================== //
 
 export default function AuthCard({ children, ...other }) {
   return (

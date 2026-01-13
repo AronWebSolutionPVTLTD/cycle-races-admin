@@ -1,12 +1,9 @@
-// material-ui
 import { useTheme } from '@mui/material/styles';
 
 import { chartsGridClasses, LineChart } from '@mui/x-charts';
 
 const data = [58, 115, 28, 83, 63, 75, 35];
 const labels = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-// ==============================|| REPORT AREA CHART ||============================== //
 
 export default function ReportAreaChart() {
   const theme = useTheme();

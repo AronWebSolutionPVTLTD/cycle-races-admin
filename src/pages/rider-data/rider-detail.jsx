@@ -15,7 +15,6 @@ import {
 import apiRequest from '../../api/api-utils';
 import DeleteConfirmationDialog from '../delete-confirmation-dialog';
 
-// Flag emoji mapping for common countries
 const getFlagEmoji = (countryCode) => {
   const codePoints = countryCode
     .toUpperCase()
@@ -33,14 +32,12 @@ const RiderDetailsPage = () => {
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
-    severity: 'success' // 'success', 'error', 'warning', 'info'
+    severity: 'success'
   });
 
-  // Show snackbar helper function
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -49,7 +46,6 @@ const RiderDetailsPage = () => {
     });
   };
 
-  // Close snackbar handler
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -103,7 +99,6 @@ const RiderDetailsPage = () => {
     try {
       await apiRequest('DELETE', `/riders/${id}`);
       showSnackbar(`Rider ${rider.name} deleted successfully`, 'success');
-      // Add a slight delay before navigating to allow the user to see the success message
       setTimeout(() => {
         navigate('/riders');
       }, 1500);
@@ -136,7 +131,6 @@ const RiderDetailsPage = () => {
             Back to Riders
           </Button>
 
-          {/* Snackbar for error state */}
           <Snackbar
             open={snackbar.open}
             autoHideDuration={6000}
@@ -163,7 +157,6 @@ const RiderDetailsPage = () => {
             Back to Riders
           </Button>
 
-          {/* Snackbar for not found state */}
           <Snackbar
             open={snackbar.open}
             autoHideDuration={6000}
@@ -179,7 +172,6 @@ const RiderDetailsPage = () => {
     );
   }
 
-  // Get flag emoji if nationality is provided
   const flagEmoji = rider.nationality ? getFlagEmoji(rider.nationality) : '';
 
   return (
@@ -210,7 +202,6 @@ const RiderDetailsPage = () => {
               gap: 4
             }}
           >
-            {/* Rider Image and Quick Info */}
             <Box
               sx={{
                 display: 'flex',
@@ -268,7 +259,6 @@ const RiderDetailsPage = () => {
               )}
             </Box>
 
-            {/* Rider Details */}
             <Box
               sx={{
                 flex: 1,
@@ -296,7 +286,6 @@ const RiderDetailsPage = () => {
                   gap: 3
                 }}
               >
-                {/* Birth Place */}
                 <Box sx={{ mb: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <EnvironmentOutlined style={{ marginRight: 8, color: 'rgba(0, 0, 0, 0.54)' }} />
@@ -309,7 +298,6 @@ const RiderDetailsPage = () => {
                   </Typography>
                 </Box>
 
-                {/* Date of Birth */}
                 <Box sx={{ mb: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <CalendarOutlined style={{ marginRight: 8, color: 'rgba(0, 0, 0, 0.54)' }} />
@@ -322,7 +310,6 @@ const RiderDetailsPage = () => {
                   </Typography>
                 </Box>
 
-                {/* Height */}
                 <Box sx={{ mb: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <ColumnHeightOutlined style={{ marginRight: 8, color: 'rgba(0, 0, 0, 0.54)' }} />
@@ -335,7 +322,6 @@ const RiderDetailsPage = () => {
                   </Typography>
                 </Box>
 
-                {/* Weight */}
                 <Box sx={{ mb: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <DashboardOutlined style={{ marginRight: 8, color: 'rgba(0, 0, 0, 0.54)' }} />
@@ -349,7 +335,6 @@ const RiderDetailsPage = () => {
                 </Box>
               </Box>
 
-              {/* Added Info */}
               <Box sx={{ mt: 3 }}>
                 <Typography variant="caption" color="text.secondary">
                   Added on: {rider.created_at ? format(new Date(rider.created_at), 'MMMM dd, yyyy') : 'Not available'}
@@ -358,7 +343,6 @@ const RiderDetailsPage = () => {
             </Box>
           </Box>
 
-          {/* Action Buttons */}
           <Box
             sx={{
               mt: 4,
@@ -388,7 +372,6 @@ const RiderDetailsPage = () => {
         itemType="rider"
       />
 
-      {/* Snackbar for main success/error messages */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

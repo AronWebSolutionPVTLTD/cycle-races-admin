@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
-// material-ui
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,22 +14,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-
-// third-party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-
-// project imports
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
-
-// assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 import { setToken } from '../../api/auth-utils';
 import apiRequest from '../../api/api-utils';
-
-// ============================|| JWT - LOGIN ||============================ //
 
 export default function AuthLogin() {
   const [checked, setChecked] = useState(false);
@@ -63,22 +53,15 @@ export default function AuthLogin() {
         password: values.password
       });
 
-      // Check if response is valid (our apiRequest already returns the data property)
       if (response && response?.data?.token) {
-        // Store authentication data
         setToken(response.data.token, response.data.admin);
-
-        // Show success message
-        setAlertSeverity('success'); // Set this first
+        setAlertSeverity('success'); 
         setAlertMessage('Login successful!');
         setAlertOpen(true);
-
-        // Redirect after successful login
         setTimeout(() => {
           navigate('/');
         }, 1500);
       } else {
-        // Handle invalid response format
         setAlertSeverity('error');
         setAlertMessage(response?.message || 'Login failed: Invalid response format');
         setAlertOpen(true);
@@ -88,8 +71,6 @@ export default function AuthLogin() {
       if (typeof error === 'object' && error.message) {
         setAlertMessage(error.message);
         setAlertOpen(true);
-
-        // Set field-specific errors if needed
         if (error.status === 401 || error.status === 400) {
           setErrors({
             email: 'Invalid email or password',

@@ -1,18 +1,12 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-
-// material-ui
 import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-
-// project imports
 import Palette from './palette';
 import Typography from './typography';
 import CustomShadows from './shadows';
 import componentsOverride from './overrides';
-
-// ==============================|| DEFAULT THEME - MAIN ||============================== //
 
 export default function ThemeCustomization({ children }) {
   const theme = Palette('light', 'default');

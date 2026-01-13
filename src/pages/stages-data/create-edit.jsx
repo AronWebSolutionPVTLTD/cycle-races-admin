@@ -43,23 +43,17 @@ const StageForm = ({ mode }) => {
     severity: 'success'
   });
   const [errors, setErrors] = useState({});
-
-  // Race selection dialog state
   const [raceDialogOpen, setRaceDialogOpen] = useState(false);
   const [racesPage, setRacesPage] = useState(0);
   const [racesPerPage, setRacesPerPage] = useState(10);
   const [totalRaces, setTotalRaces] = useState(0);
   const [racesLoading, setRacesLoading] = useState(false);
   const [racesError, setRacesError] = useState(null);
-
-  // Define table columns for race selection
   const raceColumns = [
     { id: 'race', label: 'Race Name', minWidth: 150 },
     { id: 'year', label: 'Year', minWidth: 80 },
     { id: 'country_code', label: 'Country', minWidth: 100 }
   ];
-
-  // Fetch races with pagination
   const fetchRaces = async () => {
     setRacesLoading(true);
     setRacesError(null);
@@ -81,14 +75,12 @@ const StageForm = ({ mode }) => {
     }
   };
 
-  // Effect to fetch races when pagination changes
   useEffect(() => {
     if (raceDialogOpen) {
       fetchRaces();
     }
   }, [racesPage, racesPerPage, raceDialogOpen]);
 
-  // Fetch stage details for edit mode
   useEffect(() => {
     if (iseditMode && id) {
       fetchStageDetails();
@@ -102,7 +94,6 @@ const StageForm = ({ mode }) => {
       if (response.data) {
         const stageData = response.data;
 
-        // Handle race data correctly
         let raceId = stageData.race_id;
         let raceName = '';
 
@@ -202,14 +193,9 @@ const StageForm = ({ mode }) => {
     try {
       const apiMethod = !iseditMode ? 'post' : 'put';
       const apiEndpoint = !iseditMode ? '/stages' : `/stages/${id}`;
-
-      // Create a copy of formData without race_name (as it's just for UI)
       const dataToSubmit = { ...formData };
       delete dataToSubmit.race_name;
-      // Ensure stage_number is a number
       dataToSubmit.stage_number = Number(dataToSubmit.stage_number);
-
-      // Also convert distance to number
       dataToSubmit.distance = Number(dataToSubmit.distance);
 
       const response = await apiRequest(apiMethod, apiEndpoint, dataToSubmit);
@@ -418,7 +404,6 @@ const StageForm = ({ mode }) => {
         </form>
       </Paper>
 
-      {/* Race Selection Dialog */}
       <Dialog open={raceDialogOpen} onClose={handleRaceDialogClose} fullWidth maxWidth="md">
         <DialogTitle>Select Race</DialogTitle>
         <DialogContent dividers>

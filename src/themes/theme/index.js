@@ -1,5 +1,3 @@
-// ==============================|| PRESET THEME - DEFAULT ||============================== //
-
 export default function Default(colors) {
   const { blue, red, gold, cyan, green, grey } = colors;
   const greyColors = {

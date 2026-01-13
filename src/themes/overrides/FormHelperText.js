@@ -1,5 +1,3 @@
-// ==============================|| OVERRIDES - FORM HELPER TEXT ||============================== //
-
 export default function FormHelperText() {
   return {
     MuiFormHelperText: {

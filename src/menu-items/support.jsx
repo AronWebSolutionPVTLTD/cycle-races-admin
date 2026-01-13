@@ -1,14 +1,9 @@
-// assets
 import { ChromeOutlined, QuestionOutlined, OrderedListOutlined } from '@ant-design/icons';
-
-// icons
 const icons = {
   ChromeOutlined,
   QuestionOutlined,
   OrderedListOutlined
 };
-
-// ==============================|| MENU ITEMS - SAMPLE PAGE & DOCUMENTATION ||============================== //
 
 const support = {
   id: 'support',
@@ -58,15 +53,7 @@ const support = {
       url: '/teammerging',
       icon: icons.ChromeOutlined
     },
-    // {
-    //   id: 'documentation',
-    //   title: 'Documentation',
-    //   type: 'item',
-    //   url: 'https://codedthemes.gitbook.io/mantis/',
-    //   icon: icons.QuestionOutlined,
-    //   external: true,
-    //   target: true
-    // }
+  
   ]
 };
 

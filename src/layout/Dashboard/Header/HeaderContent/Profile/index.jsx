@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
@@ -15,25 +13,17 @@ import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-// project imports
 import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
 import Avatar from 'components/@extended/Avatar';
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import IconButton from 'components/@extended/IconButton';
-
-// assets
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
-import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { getToken, removeToken, setToken } from '../../../../../api/auth-utils';
 import { useNavigate } from 'react-router';
 import apiRequest from '../../../../../api/api-utils';
-
-// tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div role="tabpanel" hidden={value !== index} id={`profile-tabpanel-${index}`} aria-labelledby={`profile-tab-${index}`} {...other}>
@@ -48,8 +38,6 @@ function a11yProps(index) {
     'aria-controls': `profile-tabpanel-${index}`
   };
 }
-
-// ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 export default function Profile() {
   const theme = useTheme();
@@ -175,39 +163,18 @@ export default function Profile() {
                         label="Profile"
                         {...a11yProps(0)}
                       />
-                      {/* <Tab
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          textTransform: 'capitalize',
-                          gap: 1.25,
-                          '& .MuiTab-icon': {
-                            marginBottom: 0
-                          }
-                        }}
-                        icon={<SettingOutlined />}
-                        label="Setting"
-                        {...a11yProps(1)}
-                      /> */}
                     </Tabs>
                   </Box>
                   <TabPanel value={value} index={0} dir={theme.direction}>
                     <ProfileTab 
                       adminInfo={adminInfo}
                       onUpdateProfile={(updatedInfo) => {
-                        // Update adminInfo in localStorage
                         setToken(getToken().token, updatedInfo);
-                        // Force re-render by updating state
                         window.location.reload();
                       }}
                     />
                   </TabPanel>
-                  {/* <TabPanel value={value} index={1} dir={theme.direction}>
-                    <SettingTab />
-                  </TabPanel> */}
-                </MainCard>
+              </MainCard>
               </ClickAwayListener>
             </Paper>
           </Transitions>

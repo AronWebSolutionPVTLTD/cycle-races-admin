@@ -39,27 +39,19 @@ const TeamList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-
-  // Filter states
   const [anchorElYear, setAnchorElYear] = useState(null);
   const [anchorElCountry, setAnchorElCountry] = useState(null);
   const [years, setYears] = useState([]);
   const [countries, setCountries] = useState([]);
-
-  // Active filters
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
-
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
     severity: 'info'
   });
-
-  // Show snackbar function
   const showSnackbar = useCallback((message, severity = 'info') => {
     setSnackbar({
       open: true,
@@ -68,7 +60,6 @@ const TeamList = () => {
     });
   }, []);
 
-  // Close snackbar function
   const handleCloseSnackbar = useCallback(() => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   }, []);
@@ -82,8 +73,6 @@ const TeamList = () => {
         limit: rowsPerPage,
         ...(searchTerm ? { search: searchTerm } : {})
       };
-
-      // Apply filters if selected
       if (selectedYear) {
         endpoint = `/teams/year/${selectedYear}`;
       } else if (selectedCountry) {
@@ -96,8 +85,6 @@ const TeamList = () => {
       setTotalCount(response.totalteam || 0);
       setError(null);
 
-      // Extract unique years and countries for filters
-      // Only do this when loading all teams (no filters active)
       if (!selectedYear && !selectedCountry) {
         const uniqueYears = [...new Set(teamsData.map((team) => team.year))].sort((a, b) => b - a);
         const uniqueCountries = [...new Set(teamsData.map((team) => team.flag))].filter(Boolean).sort();
@@ -106,7 +93,6 @@ const TeamList = () => {
         setCountries(uniqueCountries);
       }
 
-      // Show message when search returns no results
       if (searchTerm && teamsData.length === 0) {
         showSnackbar('No teams found matching your search criteria', 'info');
       }
@@ -122,13 +108,12 @@ const TeamList = () => {
     fetchTeams();
   }, [fetchTeams]);
 
-  // Handle search input change with debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchTerm !== undefined) {
-        setPage(0); // Reset to first page when searching
+        setPage(0);
       }
-    }, 500); // 500ms debounce
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
@@ -163,7 +148,6 @@ const TeamList = () => {
     fetchTeams();
   };
 
-  // Filter menu handlers
   const handleFilterMenu = (filterType) => (event) => {
     if (filterType === 'year') {
       setAnchorElYear(event.currentTarget);
@@ -195,7 +179,6 @@ const TeamList = () => {
     setPage(0);
   };
 
-  // Clear filters
   const clearFilters = () => {
     setSelectedYear(null);
     setSelectedCountry(null);
@@ -203,7 +186,6 @@ const TeamList = () => {
     showSnackbar('Filters cleared', 'info');
   };
 
-  // Team actions
   const handleViewTeam = (team) => {
     navigate(`/team/${team._id}`);
   };
@@ -344,7 +326,6 @@ const TeamList = () => {
 
   return (
     <Box sx={{ width: '100%', px: { xs: 2, sm: 3 }, py: 3 }}>
-      {/* Header Section with Title, Filters and Actions */}
       <Box
         sx={{
           display: 'flex',
@@ -355,7 +336,6 @@ const TeamList = () => {
           gap: 2
         }}
       >
-        {/* Title with Active Filters */}
         <Box>
           <Typography variant="h5" component="h1" sx={{ mb: 1 }}>
             Teams
@@ -383,7 +363,6 @@ const TeamList = () => {
           </Box>
         </Box>
 
-        {/* Action Buttons */}
         <Box
           sx={{
             display: 'flex',
@@ -392,9 +371,7 @@ const TeamList = () => {
             width: { xs: '100%', sm: 'auto' }
           }}
         >
-          {/* Filters and Actions */}
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            {/* Year Filter */}
             <Button
               variant="outlined"
               color="primary"
@@ -414,7 +391,6 @@ const TeamList = () => {
               ))}
             </Menu>
 
-            {/* Country Filter */}
             <Button
               variant="outlined"
               color="primary"
@@ -439,21 +415,18 @@ const TeamList = () => {
               ))}
             </Menu>
 
-            {/* Refresh Button */}
             <Tooltip title="Refresh Data">
               <Button
                 variant="outlined"
                 color="primary"
                 startIcon={<ReloadOutlined />}
                 onClick={handleRefresh}
-                // sx={{ flex: { xs: '1', sm: '0 0 auto' } }}
                 sx={{ width: '120px' }}
               >
                 Refresh
               </Button>
             </Tooltip>
 
-            {/* Add Team Button */}
             <Button
               variant="contained"
               color="primary"
@@ -466,7 +439,7 @@ const TeamList = () => {
           </Stack>
         </Box>
       </Box>
-      {/* Search Field */}
+
       <Box sx={{ mb: 3 }}>
         <TextField
           size="small"
@@ -486,7 +459,6 @@ const TeamList = () => {
         />
       </Box>
 
-      {/* Data Table */}
       <CustomTable
         columns={columns}
         data={teams}
@@ -500,7 +472,6 @@ const TeamList = () => {
         onRowClick={handleRowClick}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}
@@ -509,7 +480,6 @@ const TeamList = () => {
         itemType="team"
       />
 
-      {/* Custom Snackbar */}
       <CustomSnackbar open={snackbar.open} message={snackbar.message} severity={snackbar.severity} onClose={handleCloseSnackbar} />
     </Box>
   );

@@ -1,14 +1,9 @@
 import PropTypes from 'prop-types';
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-// project imports
 import MainCard from 'components/MainCard';
-
-// ===============================|| SHADOW BOX ||=============================== //
 
 function ShadowBox({ shadow }) {
   return (
@@ -21,8 +16,6 @@ function ShadowBox({ shadow }) {
   );
 }
 
-// ===============================|| CUSTOM - SHADOW BOX ||=============================== //
-
 function CustomShadowBox({ shadow, label, color, bgcolor }) {
   return (
     <MainCard border={false} shadow={shadow} boxShadow sx={{ bgcolor: bgcolor || 'inherit' }}>
@@ -34,8 +27,6 @@ function CustomShadowBox({ shadow, label, color, bgcolor }) {
     </MainCard>
   );
 }
-
-// ============================|| COMPONENT - SHADOW ||============================ //
 
 export default function ComponentShadow() {
   const theme = useTheme();

@@ -1,11 +1,6 @@
 import PropTypes from 'prop-types';
-
-// project imports
 import DrawerHeaderStyled from './DrawerHeaderStyled';
 import Logo from 'components/logo';
-
-// ==============================|| DRAWER HEADER ||============================== //
-
 export default function DrawerHeader({ open }) {
   return (
     <DrawerHeaderStyled

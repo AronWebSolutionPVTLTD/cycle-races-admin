@@ -28,7 +28,6 @@ const RaceList = () => {
   const [selectedRace, setSelectedRace] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -118,7 +117,6 @@ const RaceList = () => {
     }
   ];
 
-  // Show snackbar helper function
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -127,13 +125,11 @@ const RaceList = () => {
     });
   };
 
-  // Handle search input change with debounce
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
-    setPage(0); // Reset to first page when searching
+    setPage(0);
   };
 
-  // Handle search submission
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       fetchRaces();
@@ -167,13 +163,12 @@ const RaceList = () => {
     fetchRaces();
   }, [page, rowsPerPage]);
 
-  // Separate search effect to avoid too many API calls
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery !== undefined) {
         fetchRaces();
       }
-    }, 500); // 500ms debounce
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -306,7 +301,6 @@ const RaceList = () => {
         onRowClick={handleRowClick}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}
@@ -315,7 +309,6 @@ const RaceList = () => {
         itemType="race"
       />
 
-      {/* Using custom snackbar component */}
       <CustomSnackbar open={snackbar.open} message={snackbar.message} severity={snackbar.severity} onClose={handleCloseSnackbar} />
     </Box>
   );

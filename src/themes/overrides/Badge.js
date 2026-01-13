@@ -1,7 +1,4 @@
-// project imports
 import getColors from 'utils/getColors';
-
-// ==============================|| BADGE - COLORS ||============================== //
 
 function getColorStyle({ color, theme }) {
   const colors = getColors(theme, color);
@@ -12,8 +9,6 @@ function getColorStyle({ color, theme }) {
     backgroundColor: lighter
   };
 }
-
-// ==============================|| OVERRIDES - BADGE ||============================== //
 
 export default function Badge(theme) {
   const defaultLightBadge = getColorStyle({ color: 'primary', theme });

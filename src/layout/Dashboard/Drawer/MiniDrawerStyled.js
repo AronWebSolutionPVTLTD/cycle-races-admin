@@ -1,8 +1,5 @@
-// material-ui
 import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
-
-// project imports
 import { DRAWER_WIDTH } from 'config';
 
 const openedMixin = (theme) => ({
@@ -32,7 +29,6 @@ const closedMixin = (theme) => ({
   boxShadow: theme.customShadows.z1
 });
 
-// ==============================|| DRAWER - MINI STYLED ||============================== //
 
 const MiniDrawerStyled = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme }) => ({
   width: DRAWER_WIDTH,

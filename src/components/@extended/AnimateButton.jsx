@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types';
-
-// third-party
 import { motion, useCycle } from 'framer-motion';
 
 export default function AnimateButton({ children, type = 'scale', direction = 'right', offset = 10, scale = { hover: 1.05, tap: 0.954 } }) {

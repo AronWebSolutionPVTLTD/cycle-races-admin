@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-// material-ui
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -10,11 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-// third-party
 import { NumericFormat } from 'react-number-format';
-
-// project imports
 import Dot from 'components/@extended/Dot';
 
 function createData(tracking_no, name, fat, carbs, protein) {
@@ -94,8 +89,6 @@ const headCells = [
   }
 ];
 
-// ==============================|| ORDER TABLE - HEADER ||============================== //
-
 function OrderTableHead({ order, orderBy }) {
   return (
     <TableHead>
@@ -144,8 +137,6 @@ function OrderStatus({ status }) {
     </Stack>
   );
 }
-
-// ==============================|| ORDER TABLE ||============================== //
 
 export default function OrderTable() {
   const order = 'asc';

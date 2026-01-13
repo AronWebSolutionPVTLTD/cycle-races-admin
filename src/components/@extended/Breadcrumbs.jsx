@@ -1,19 +1,13 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
-
-// project imports
 import MainCard from 'components/MainCard';
 import navigation from 'menu-items';
-
-// assets
 import ApartmentOutlined from '@ant-design/icons/ApartmentOutlined';
 import HomeOutlined from '@ant-design/icons/HomeOutlined';
 import HomeFilled from '@ant-design/icons/HomeFilled';
@@ -49,8 +43,6 @@ export default function Breadcrumbs({
   };
 
   let customLocation = location.pathname;
-
-  // only used for component demo breadcrumbs
   if (customLocation.includes('/components-overview/breadcrumbs')) {
     customLocation = '/apps/customer/customer-card';
   }
@@ -69,7 +61,6 @@ export default function Breadcrumbs({
     });
   });
 
-  // set active item state
   const getCollapse = (menu) => {
     if (!custom && menu.children) {
       menu.children.filter((collapse) => {
@@ -90,7 +81,6 @@ export default function Breadcrumbs({
     }
   };
 
-  // item separator
   const SeparatorIcon = separator;
   const separatorIcon = separator ? <SeparatorIcon style={{ fontSize: '0.75rem', marginTop: 2 }} /> : '/';
 
@@ -101,7 +91,6 @@ export default function Breadcrumbs({
   let CollapseIcon;
   let ItemIcon;
 
-  // collapse item
   if (main && main.type === 'collapse' && !main.breadcrumbs) {
     CollapseIcon = main.icon ? main.icon : ApartmentOutlined;
     mainContent = (
@@ -154,7 +143,6 @@ export default function Breadcrumbs({
     }
   }
 
-  // items
   if ((item && item.type === 'item') || (item?.type === 'group' && item?.url) || custom) {
     itemTitle = item?.title;
 
@@ -201,7 +189,6 @@ export default function Breadcrumbs({
       );
     }
 
-    // main
     if (item?.breadcrumbs !== false || custom) {
       breadcrumbContent = (
         <MainCard

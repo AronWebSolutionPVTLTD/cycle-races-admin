@@ -1,15 +1,10 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-
-// material-ui
 import { alpha, useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
 import { LineChart } from '@mui/x-charts/LineChart';
-
-// Sample data
 const monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const weeklyLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -39,7 +34,7 @@ function Legend({ items, onToggle }) {
   );
 }
 
-// ==============================|| INCOME AREA CHART ||============================== //
+
 
 export default function IncomeAreaChart({ view }) {
   const theme = useTheme();

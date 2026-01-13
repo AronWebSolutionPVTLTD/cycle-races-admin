@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-
-// material-ui
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -19,17 +17,10 @@ import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
-
-// assets
 import EditOutlined from '@ant-design/icons/EditOutlined';
-import ProfileOutlined from '@ant-design/icons/ProfileOutlined';
-import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
-import WalletOutlined from '@ant-design/icons/WalletOutlined';
 import apiRequest from '../../../../../api/api-utils';
 import CustomSnackbar from '../../../../../pages/custom-snackbar';
-
-// ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab({ adminInfo, onUpdateProfile }) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -96,7 +87,6 @@ export default function ProfileTab({ adminInfo, onUpdateProfile }) {
         severity: 'success'
       });
 
-      // Update adminInfo
       if (onUpdateProfile) {
         onUpdateProfile({
           ...adminInfo,
@@ -138,7 +128,6 @@ export default function ProfileTab({ adminInfo, onUpdateProfile }) {
         </ListItemButton>
  </List>
 
-      {/* Edit Profile Dialog */}
       <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} maxWidth="sm" fullWidth>
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
@@ -179,7 +168,6 @@ export default function ProfileTab({ adminInfo, onUpdateProfile }) {
         </DialogActions>
       </Dialog>
 
-      {/* View Profile Dialog */}
       <Dialog open={viewDialogOpen} onClose={handleCloseViewDialog} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ pb: 2 }}>Profile Information</DialogTitle>
         <DialogContent>
@@ -249,7 +237,6 @@ export default function ProfileTab({ adminInfo, onUpdateProfile }) {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar */}
       <CustomSnackbar
         open={snackbar.open}
         message={snackbar.message}

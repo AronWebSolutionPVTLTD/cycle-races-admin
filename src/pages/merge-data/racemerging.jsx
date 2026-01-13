@@ -26,30 +26,20 @@ import CustomSnackbar from '../custom-snackbar';
 const RaceMerging = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-
-  // State for old race
   const [oldRaceOptions, setOldRaceOptions] = useState([]);
   const [oldRaceSearchTerm, setOldRaceSearchTerm] = useState('');
   const [oldRaceLoading, setOldRaceLoading] = useState(false);
   const [selectedOldRace, setSelectedOldRace] = useState(null);
-
-  // State for new race
   const [newRaceOptions, setNewRaceOptions] = useState([]);
   const [newRaceSearchTerm, setNewRaceSearchTerm] = useState('');
   const [newRaceLoading, setNewRaceLoading] = useState(false);
   const [selectedNewRace, setSelectedNewRace] = useState(null);
-
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
     severity: 'success'
   });
-
-  // Merge confirmation dialog state
   const [mergeDialogOpen, setMergeDialogOpen] = useState(false);
-
-  // Show snackbar helper function
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -58,7 +48,6 @@ const RaceMerging = () => {
     });
   };
 
-  // Fetch races for old race dropdown
   const fetchOldRaces = useCallback(async () => {
     if (!oldRaceSearchTerm || oldRaceSearchTerm.length < 2) {
       setOldRaceOptions([]);
@@ -87,7 +76,6 @@ const RaceMerging = () => {
     }
   }, [oldRaceSearchTerm]);
 
-  // Fetch races for new race dropdown
   const fetchNewRaces = useCallback(async () => {
     if (!newRaceSearchTerm || newRaceSearchTerm.length < 2) {
       setNewRaceOptions([]);
@@ -116,7 +104,6 @@ const RaceMerging = () => {
     }
   }, [newRaceSearchTerm]);
 
-  // Debounced search for old race
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchOldRaces();
@@ -125,7 +112,6 @@ const RaceMerging = () => {
     return () => clearTimeout(timer);
   }, [oldRaceSearchTerm, fetchOldRaces]);
 
-  // Debounced search for new race
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchNewRaces();
@@ -134,7 +120,6 @@ const RaceMerging = () => {
     return () => clearTimeout(timer);
   }, [newRaceSearchTerm, fetchNewRaces]);
 
-  // Handle old race selection
   const handleOldRaceSelect = (event, value) => {
     setSelectedOldRace(value);
     if (value) {
@@ -144,7 +129,6 @@ const RaceMerging = () => {
     }
   };
 
-  // Handle new race selection
   const handleNewRaceSelect = (event, value) => {
     setSelectedNewRace(value);
     if (value) {
@@ -154,7 +138,6 @@ const RaceMerging = () => {
     }
   };
 
-  // Handle old race input change
   const handleOldRaceInputChange = (event, value, reason) => {
     if (reason === 'clear' || reason === 'reset') {
       setSelectedOldRace(null);
@@ -164,7 +147,6 @@ const RaceMerging = () => {
     }
   };
 
-  // Handle new race input change
   const handleNewRaceInputChange = (event, value, reason) => {
     if (reason === 'clear' || reason === 'reset') {
       setSelectedNewRace(null);
@@ -174,25 +156,21 @@ const RaceMerging = () => {
     }
   };
 
-  // Clear old race selection
   const handleClearOldRace = () => {
     setSelectedOldRace(null);
     setOldRaceSearchTerm('');
   };
 
-  // Clear new race selection
   const handleClearNewRace = () => {
     setSelectedNewRace(null);
     setNewRaceSearchTerm('');
   };
 
-  // Format race name for display
   const formatRaceName = (race) => {
     if (!race) return '';
     return race.race || race.name || 'Unnamed Race';
   };
 
-  // Handle merge button click - opens confirmation dialog
   const handleMerge = () => {
     if (!selectedOldRace) {
       showSnackbar('Please select an old race', 'error');
@@ -208,12 +186,9 @@ const RaceMerging = () => {
       showSnackbar('Old race and new race cannot be the same', 'error');
       return;
     }
-
-    // Open confirmation dialog
     setMergeDialogOpen(true);
   };
 
-  // Handle merge confirmation - actually calls the API
   const handleMergeConfirm = async () => {
     if (!selectedOldRace || !selectedNewRace) return;
 
@@ -231,16 +206,12 @@ const RaceMerging = () => {
         'success'
       );
 
-      // Close dialog
       setMergeDialogOpen(false);
-
-      // Reset selections after successful merge
       setSelectedOldRace(null);
       setSelectedNewRace(null);
       setOldRaceSearchTerm('');
       setNewRaceSearchTerm('');
 
-      // Navigate to race list after 2 seconds
       setTimeout(() => {
         navigate('/races-list');
       }, 2000);
@@ -250,7 +221,6 @@ const RaceMerging = () => {
     }
   };
 
-  // Handle merge cancel - closes dialog without calling API
   const handleMergeCancel = () => {
     setMergeDialogOpen(false);
   };
@@ -261,24 +231,22 @@ const RaceMerging = () => {
 
   return (
     <Box sx={{ width: '100%', px: { xs: 2, sm: 3, md: 4 }, py: 4 }}>
-   
-      <Paper 
-        elevation={2} 
-        sx={{ 
-          p: { xs: 3, sm: 4, md: 5 }, 
-          maxWidth: 1200, 
+
+      <Paper
+        elevation={2}
+        sx={{
+          p: { xs: 3, sm: 4, md: 5 },
+          maxWidth: 1200,
           mx: 'auto',
           borderRadius: 2
         }}
       >
-        {/* Side by Side Search Section */}
         <Grid container spacing={3} alignItems="flex-start">
-          {/* Old Race Section */}
           <Grid size={{ xs: 12, md: 5 }}>
-            <Typography 
-              variant="subtitle2" 
-              sx={{ 
-                mb: 1.5, 
+            <Typography
+              variant="subtitle2"
+              sx={{
+                mb: 1.5,
                 color: 'text.secondary',
                 fontWeight: 500,
                 fontSize: '0.875rem'
@@ -286,7 +254,7 @@ const RaceMerging = () => {
             >
               OLD RACE NAME
             </Typography>
-            
+
             <Autocomplete
               id="old-race-search"
               options={oldRaceOptions}
@@ -360,7 +328,6 @@ const RaceMerging = () => {
               }
             />
 
-            {/* Selected Old Race Display */}
             {selectedOldRace && (
               <Box
                 sx={{
@@ -376,16 +343,16 @@ const RaceMerging = () => {
                 }}
               >
                 <Box sx={{ flex: 1 }}>
-                  <Typography 
-                    variant="body1" 
+                  <Typography
+                    variant="body1"
                     fontWeight={600}
                     sx={{ color: theme.palette.success.dark, mb: 0.5 }}
                   >
                     {formatRaceName(selectedOldRace)}
                   </Typography>
                   {selectedOldRace.class && (
-                    <Typography 
-                      variant="caption" 
+                    <Typography
+                      variant="caption"
                       sx={{ color: theme.palette.success.main }}
                     >
                       Class: {selectedOldRace.class}
@@ -396,7 +363,6 @@ const RaceMerging = () => {
             )}
           </Grid>
 
-          {/* VS Separator */}
           <Grid size={{ xs: 12, md: 2 }}>
             <Box
               sx={{
@@ -420,12 +386,11 @@ const RaceMerging = () => {
             </Box>
           </Grid>
 
-          {/* New Race Section */}
           <Grid size={{ xs: 12, md: 5 }}>
-            <Typography 
-              variant="subtitle2" 
-              sx={{ 
-                mb: 1.5, 
+            <Typography
+              variant="subtitle2"
+              sx={{
+                mb: 1.5,
                 color: 'text.secondary',
                 fontWeight: 500,
                 fontSize: '0.875rem'
@@ -433,7 +398,7 @@ const RaceMerging = () => {
             >
               NEW RACE NAME
             </Typography>
-            
+
             <Autocomplete
               id="new-race-search"
               options={newRaceOptions}
@@ -507,7 +472,6 @@ const RaceMerging = () => {
               }
             />
 
-            {/* Selected New Race Display */}
             {selectedNewRace && (
               <Box
                 sx={{
@@ -523,16 +487,16 @@ const RaceMerging = () => {
                 }}
               >
                 <Box sx={{ flex: 1 }}>
-                  <Typography 
-                    variant="body1" 
+                  <Typography
+                    variant="body1"
                     fontWeight={600}
                     sx={{ color: theme.palette.success.dark, mb: 0.5 }}
                   >
                     {formatRaceName(selectedNewRace)}
                   </Typography>
                   {selectedNewRace.class && (
-                    <Typography 
-                      variant="caption" 
+                    <Typography
+                      variant="caption"
                       sx={{ color: theme.palette.success.main }}
                     >
                       Class: {selectedNewRace.class}
@@ -544,16 +508,14 @@ const RaceMerging = () => {
           </Grid>
         </Grid>
 
-        {/* Dashed Divider */}
-        <Divider 
-          sx={{ 
+        <Divider
+          sx={{
             my: 4,
             borderStyle: 'dashed',
             borderColor: 'divider'
-          }} 
+          }}
         />
 
-        {/* Merge Button */}
         <Stack direction="row" justifyContent="center">
           <Button
             variant="contained"
@@ -562,7 +524,7 @@ const RaceMerging = () => {
             endIcon={<ArrowRightOutlined />}
             onClick={handleMerge}
             disabled={!selectedOldRace || !selectedNewRace}
-            sx={{ 
+            sx={{
               minWidth: 220,
               py: 1.5,
               px: 4,
@@ -593,11 +555,10 @@ const RaceMerging = () => {
         </Stack>
       </Paper>
 
-      {/* Merge Confirmation Dialog */}
-      <Dialog 
-        open={mergeDialogOpen} 
-        onClose={handleMergeCancel} 
-        fullWidth 
+      <Dialog
+        open={mergeDialogOpen}
+        onClose={handleMergeCancel}
+        fullWidth
         maxWidth="sm"
         PaperProps={{
           sx: {
@@ -606,8 +567,8 @@ const RaceMerging = () => {
           }
         }}
       >
-        <DialogTitle 
-          sx={{ 
+        <DialogTitle
+          sx={{
             pb: 1,
             borderBottom: `1px solid ${theme.palette.divider}`,
             fontWeight: 600,
@@ -620,8 +581,7 @@ const RaceMerging = () => {
           <DialogContentText sx={{ mb: 3, fontSize: '0.95rem' }}>
             Are you sure you want to merge the following races? This action cannot be undone.
           </DialogContentText>
-          
-          {/* Old Race Card */}
+
           <Box
             sx={{
               mb: 2,
@@ -635,9 +595,9 @@ const RaceMerging = () => {
               }
             }}
           >
-            <Typography 
-              variant="caption" 
-              sx={{ 
+            <Typography
+              variant="caption"
+              sx={{
                 color: theme.palette.error.main,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -649,9 +609,9 @@ const RaceMerging = () => {
             >
               Old Race Name
             </Typography>
-            <Typography 
-              variant="h6" 
-              sx={{ 
+            <Typography
+              variant="h6"
+              sx={{
                 color: theme.palette.error.main,
                 fontWeight: 500,
                 opacity: 0.85
@@ -661,7 +621,6 @@ const RaceMerging = () => {
             </Typography>
           </Box>
 
-          {/* Arrow Icon */}
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 1.5 }}>
             <Box
               sx={{
@@ -675,17 +634,16 @@ const RaceMerging = () => {
                 border: `2px solid ${theme.palette.primary.light || 'rgba(25, 118, 210, 0.3)'}`
               }}
             >
-              <ArrowRightOutlined 
-                style={{ 
-                  fontSize: '20px', 
+              <ArrowRightOutlined
+                style={{
+                  fontSize: '20px',
                   color: theme.palette.primary.main,
                   transform: 'rotate(90deg)'
-                }} 
+                }}
               />
             </Box>
           </Box>
 
-          {/* New Race Card */}
           <Box
             sx={{
               mb: 2,
@@ -699,9 +657,9 @@ const RaceMerging = () => {
               }
             }}
           >
-            <Typography 
-              variant="caption" 
-              sx={{ 
+            <Typography
+              variant="caption"
+              sx={{
                 color: theme.palette.success.main,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -713,9 +671,9 @@ const RaceMerging = () => {
             >
               New Race Name
             </Typography>
-            <Typography 
-              variant="h6" 
-              sx={{ 
+            <Typography
+              variant="h6"
+              sx={{
                 color: theme.palette.success.main,
                 fontWeight: 500,
                 opacity: 0.85
@@ -725,7 +683,6 @@ const RaceMerging = () => {
             </Typography>
           </Box>
 
-          {/* Warning Message */}
           <Box
             sx={{
               mt: 2,
@@ -735,9 +692,9 @@ const RaceMerging = () => {
               border: `1px solid ${theme.palette.warning.light || 'rgba(237, 108, 2, 0.2)'}`
             }}
           >
-            <Typography 
-              variant="body2" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              sx={{
                 color: theme.palette.warning.dark || 'rgba(237, 108, 2, 0.9)',
                 fontSize: '0.875rem',
                 lineHeight: 1.6
@@ -747,15 +704,15 @@ const RaceMerging = () => {
             </Typography>
           </Box>
         </DialogContent>
-        <DialogActions 
-          sx={{ 
-            px: 3, 
+        <DialogActions
+          sx={{
+            px: 3,
             pb: 3,
             pt: 2,
             borderTop: `1px solid ${theme.palette.divider}`
           }}
         >
-          <Button 
+          <Button
             onClick={handleMergeCancel}
             variant="outlined"
             sx={{
@@ -767,9 +724,9 @@ const RaceMerging = () => {
           >
             Cancel
           </Button>
-          <Button 
-            onClick={handleMergeConfirm} 
-            color="primary" 
+          <Button
+            onClick={handleMergeConfirm}
+            color="primary"
             variant="contained"
             sx={{
               minWidth: 100,
@@ -787,7 +744,6 @@ const RaceMerging = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
       <CustomSnackbar
         open={snackbar.open}
         message={snackbar.message}

@@ -26,30 +26,20 @@ import CustomSnackbar from '../custom-snackbar';
 const TeamMerging = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-
-  // State for old team
   const [oldTeamOptions, setOldTeamOptions] = useState([]);
   const [oldTeamSearchTerm, setOldTeamSearchTerm] = useState('');
   const [oldTeamLoading, setOldTeamLoading] = useState(false);
   const [selectedOldTeam, setSelectedOldTeam] = useState(null);
-
-  // State for new team
   const [newTeamOptions, setNewTeamOptions] = useState([]);
   const [newTeamSearchTerm, setNewTeamSearchTerm] = useState('');
   const [newTeamLoading, setNewTeamLoading] = useState(false);
   const [selectedNewTeam, setSelectedNewTeam] = useState(null);
-
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
     severity: 'success'
   });
-
-  // Merge confirmation dialog state
   const [mergeDialogOpen, setMergeDialogOpen] = useState(false);
-
-  // Show snackbar helper function
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -57,8 +47,6 @@ const TeamMerging = () => {
       severity
     });
   };
-
-  // Fetch teams for old team dropdown
   const fetchOldTeams = useCallback(async () => {
     if (!oldTeamSearchTerm || oldTeamSearchTerm.length < 2) {
       setOldTeamOptions([]);
@@ -87,7 +75,6 @@ const TeamMerging = () => {
     }
   }, [oldTeamSearchTerm]);
 
-  // Fetch teams for new team dropdown
   const fetchNewTeams = useCallback(async () => {
     if (!newTeamSearchTerm || newTeamSearchTerm.length < 2) {
       setNewTeamOptions([]);
@@ -116,7 +103,6 @@ const TeamMerging = () => {
     }
   }, [newTeamSearchTerm]);
 
-  // Debounced search for old team
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchOldTeams();
@@ -125,7 +111,6 @@ const TeamMerging = () => {
     return () => clearTimeout(timer);
   }, [oldTeamSearchTerm, fetchOldTeams]);
 
-  // Debounced search for new team
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchNewTeams();
@@ -134,7 +119,6 @@ const TeamMerging = () => {
     return () => clearTimeout(timer);
   }, [newTeamSearchTerm, fetchNewTeams]);
 
-  // Handle old team selection
   const handleOldTeamSelect = (event, value) => {
     setSelectedOldTeam(value);
     if (value) {
@@ -144,7 +128,6 @@ const TeamMerging = () => {
     }
   };
 
-  // Handle new team selection
   const handleNewTeamSelect = (event, value) => {
     setSelectedNewTeam(value);
     if (value) {
@@ -154,7 +137,6 @@ const TeamMerging = () => {
     }
   };
 
-  // Handle old team input change
   const handleOldTeamInputChange = (event, value, reason) => {
     if (reason === 'clear' || reason === 'reset') {
       setSelectedOldTeam(null);
@@ -164,7 +146,6 @@ const TeamMerging = () => {
     }
   };
 
-  // Handle new team input change
   const handleNewTeamInputChange = (event, value, reason) => {
     if (reason === 'clear' || reason === 'reset') {
       setSelectedNewTeam(null);
@@ -174,25 +155,21 @@ const TeamMerging = () => {
     }
   };
 
-  // Clear old team selection
   const handleClearOldTeam = () => {
     setSelectedOldTeam(null);
     setOldTeamSearchTerm('');
   };
 
-  // Clear new team selection
   const handleClearNewTeam = () => {
     setSelectedNewTeam(null);
     setNewTeamSearchTerm('');
   };
 
-  // Format team name for display
   const formatTeamName = (team) => {
     if (!team) return '';
     return team.teamName || team.name || 'Unnamed Team';
   };
 
-  // Handle merge button click - opens confirmation dialog
   const handleMerge = () => {
     if (!selectedOldTeam) {
       showSnackbar('Please select an old team', 'error');
@@ -209,11 +186,9 @@ const TeamMerging = () => {
       return;
     }
 
-    // Open confirmation dialog
     setMergeDialogOpen(true);
   };
 
-  // Handle merge confirmation - actually calls the API
   const handleMergeConfirm = async () => {
     if (!selectedOldTeam || !selectedNewTeam) return;
 
@@ -231,16 +206,12 @@ const TeamMerging = () => {
         'success'
       );
 
-      // Close dialog
       setMergeDialogOpen(false);
-
-      // Reset selections after successful merge
       setSelectedOldTeam(null);
       setSelectedNewTeam(null);
       setOldTeamSearchTerm('');
       setNewTeamSearchTerm('');
 
-      // Navigate to team list after 2 seconds
       setTimeout(() => {
         navigate('/teams');
       }, 2000);
@@ -250,7 +221,6 @@ const TeamMerging = () => {
     }
   };
 
-  // Handle merge cancel - closes dialog without calling API
   const handleMergeCancel = () => {
     setMergeDialogOpen(false);
   };
@@ -261,24 +231,22 @@ const TeamMerging = () => {
 
   return (
     <Box sx={{ width: '100%', px: { xs: 2, sm: 3, md: 4 }, py: 4 }}>
-   
-      <Paper 
-        elevation={2} 
-        sx={{ 
-          p: { xs: 3, sm: 4, md: 5 }, 
-          maxWidth: 1200, 
+
+      <Paper
+        elevation={2}
+        sx={{
+          p: { xs: 3, sm: 4, md: 5 },
+          maxWidth: 1200,
           mx: 'auto',
           borderRadius: 2
         }}
       >
-        {/* Side by Side Search Section */}
         <Grid container spacing={3} alignItems="flex-start">
-          {/* Old Team Section */}
           <Grid size={{ xs: 12, md: 5 }}>
-            <Typography 
-              variant="subtitle2" 
-              sx={{ 
-                mb: 1.5, 
+            <Typography
+              variant="subtitle2"
+              sx={{
+                mb: 1.5,
                 color: 'text.secondary',
                 fontWeight: 500,
                 fontSize: '0.875rem'
@@ -286,7 +254,7 @@ const TeamMerging = () => {
             >
               OLD TEAM NAME
             </Typography>
-            
+
             <Autocomplete
               id="old-team-search"
               options={oldTeamOptions}
@@ -360,7 +328,6 @@ const TeamMerging = () => {
               }
             />
 
-            {/* Selected Old Team Display */}
             {selectedOldTeam && (
               <Box
                 sx={{
@@ -376,16 +343,16 @@ const TeamMerging = () => {
                 }}
               >
                 <Box sx={{ flex: 1 }}>
-                  <Typography 
-                    variant="body1" 
+                  <Typography
+                    variant="body1"
                     fontWeight={600}
                     sx={{ color: theme.palette.success.dark, mb: 0.5 }}
                   >
                     {formatTeamName(selectedOldTeam)}
                   </Typography>
                   {selectedOldTeam.flag && (
-                    <Typography 
-                      variant="caption" 
+                    <Typography
+                      variant="caption"
                       sx={{ color: theme.palette.success.main }}
                     >
                       Country: {selectedOldTeam.flag}
@@ -396,7 +363,6 @@ const TeamMerging = () => {
             )}
           </Grid>
 
-          {/* VS Separator */}
           <Grid size={{ xs: 12, md: 2 }}>
             <Box
               sx={{
@@ -420,12 +386,11 @@ const TeamMerging = () => {
             </Box>
           </Grid>
 
-          {/* New Team Section */}
           <Grid size={{ xs: 12, md: 5 }}>
-            <Typography 
-              variant="subtitle2" 
-              sx={{ 
-                mb: 1.5, 
+            <Typography
+              variant="subtitle2"
+              sx={{
+                mb: 1.5,
                 color: 'text.secondary',
                 fontWeight: 500,
                 fontSize: '0.875rem'
@@ -433,7 +398,7 @@ const TeamMerging = () => {
             >
               NEW TEAM NAME
             </Typography>
-            
+
             <Autocomplete
               id="new-team-search"
               options={newTeamOptions}
@@ -507,7 +472,6 @@ const TeamMerging = () => {
               }
             />
 
-            {/* Selected New Team Display */}
             {selectedNewTeam && (
               <Box
                 sx={{
@@ -523,16 +487,16 @@ const TeamMerging = () => {
                 }}
               >
                 <Box sx={{ flex: 1 }}>
-                  <Typography 
-                    variant="body1" 
+                  <Typography
+                    variant="body1"
                     fontWeight={600}
                     sx={{ color: theme.palette.success.dark, mb: 0.5 }}
                   >
                     {formatTeamName(selectedNewTeam)}
                   </Typography>
                   {selectedNewTeam.flag && (
-                    <Typography 
-                      variant="caption" 
+                    <Typography
+                      variant="caption"
                       sx={{ color: theme.palette.success.main }}
                     >
                       Country: {selectedNewTeam.flag}
@@ -544,16 +508,14 @@ const TeamMerging = () => {
           </Grid>
         </Grid>
 
-        {/* Dashed Divider */}
-        <Divider 
-          sx={{ 
+        <Divider
+          sx={{
             my: 4,
             borderStyle: 'dashed',
             borderColor: 'divider'
-          }} 
+          }}
         />
 
-        {/* Merge Button */}
         <Stack direction="row" justifyContent="center">
           <Button
             variant="contained"
@@ -562,7 +524,7 @@ const TeamMerging = () => {
             endIcon={<ArrowRightOutlined />}
             onClick={handleMerge}
             disabled={!selectedOldTeam || !selectedNewTeam}
-            sx={{ 
+            sx={{
               minWidth: 220,
               py: 1.5,
               px: 4,
@@ -593,11 +555,10 @@ const TeamMerging = () => {
         </Stack>
       </Paper>
 
-      {/* Merge Confirmation Dialog */}
-      <Dialog 
-        open={mergeDialogOpen} 
-        onClose={handleMergeCancel} 
-        fullWidth 
+      <Dialog
+        open={mergeDialogOpen}
+        onClose={handleMergeCancel}
+        fullWidth
         maxWidth="sm"
         PaperProps={{
           sx: {
@@ -606,8 +567,8 @@ const TeamMerging = () => {
           }
         }}
       >
-        <DialogTitle 
-          sx={{ 
+        <DialogTitle
+          sx={{
             pb: 1,
             borderBottom: `1px solid ${theme.palette.divider}`,
             fontWeight: 600,
@@ -620,8 +581,7 @@ const TeamMerging = () => {
           <DialogContentText sx={{ mb: 3, fontSize: '0.95rem' }}>
             Are you sure you want to merge the following teams? This action cannot be undone.
           </DialogContentText>
-          
-          {/* Old Team Card */}
+
           <Box
             sx={{
               mb: 2,
@@ -635,9 +595,9 @@ const TeamMerging = () => {
               }
             }}
           >
-            <Typography 
-              variant="caption" 
-              sx={{ 
+            <Typography
+              variant="caption"
+              sx={{
                 color: theme.palette.error.main,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -649,9 +609,9 @@ const TeamMerging = () => {
             >
               Old Team Name
             </Typography>
-            <Typography 
-              variant="h6" 
-              sx={{ 
+            <Typography
+              variant="h6"
+              sx={{
                 color: theme.palette.error.main,
                 fontWeight: 500,
                 opacity: 0.85
@@ -661,7 +621,6 @@ const TeamMerging = () => {
             </Typography>
           </Box>
 
-          {/* Arrow Icon */}
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 1.5 }}>
             <Box
               sx={{
@@ -675,17 +634,16 @@ const TeamMerging = () => {
                 border: `2px solid ${theme.palette.primary.light || 'rgba(25, 118, 210, 0.3)'}`
               }}
             >
-              <ArrowRightOutlined 
-                style={{ 
-                  fontSize: '20px', 
+              <ArrowRightOutlined
+                style={{
+                  fontSize: '20px',
                   color: theme.palette.primary.main,
                   transform: 'rotate(90deg)'
-                }} 
+                }}
               />
             </Box>
           </Box>
 
-          {/* New Team Card */}
           <Box
             sx={{
               mb: 2,
@@ -699,9 +657,9 @@ const TeamMerging = () => {
               }
             }}
           >
-            <Typography 
-              variant="caption" 
-              sx={{ 
+            <Typography
+              variant="caption"
+              sx={{
                 color: theme.palette.success.main,
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -713,9 +671,9 @@ const TeamMerging = () => {
             >
               New Team Name
             </Typography>
-            <Typography 
-              variant="h6" 
-              sx={{ 
+            <Typography
+              variant="h6"
+              sx={{
                 color: theme.palette.success.main,
                 fontWeight: 500,
                 opacity: 0.85
@@ -725,7 +683,6 @@ const TeamMerging = () => {
             </Typography>
           </Box>
 
-          {/* Warning Message */}
           <Box
             sx={{
               mt: 2,
@@ -735,9 +692,9 @@ const TeamMerging = () => {
               border: `1px solid ${theme.palette.warning.light || 'rgba(237, 108, 2, 0.2)'}`
             }}
           >
-            <Typography 
-              variant="body2" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              sx={{
                 color: theme.palette.warning.dark || 'rgba(237, 108, 2, 0.9)',
                 fontSize: '0.875rem',
                 lineHeight: 1.6
@@ -747,15 +704,15 @@ const TeamMerging = () => {
             </Typography>
           </Box>
         </DialogContent>
-        <DialogActions 
-          sx={{ 
-            px: 3, 
+        <DialogActions
+          sx={{
+            px: 3,
             pb: 3,
             pt: 2,
             borderTop: `1px solid ${theme.palette.divider}`
           }}
         >
-          <Button 
+          <Button
             onClick={handleMergeCancel}
             variant="outlined"
             sx={{
@@ -767,9 +724,9 @@ const TeamMerging = () => {
           >
             Cancel
           </Button>
-          <Button 
-            onClick={handleMergeConfirm} 
-            color="primary" 
+          <Button
+            onClick={handleMergeConfirm}
+            color="primary"
             variant="contained"
             sx={{
               minWidth: 100,
@@ -787,7 +744,6 @@ const TeamMerging = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
       <CustomSnackbar
         open={snackbar.open}
         message={snackbar.message}

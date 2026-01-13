@@ -20,16 +20,10 @@ import apiRequest from '../../api/api-utils';
 import MuiAlert from '@mui/material/Alert';
 import { UploadOutlined } from '@ant-design/icons';
 
-// Alert component for Snackbar
 const AlertMessage = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-/**
- * Reusable form component for creating and editing riders
- * @param {Object} props - Component props
- * @param {string} props.mode - 'create' or 'edit' mode
- */
 const RiderForm = ({ mode = 'create' }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -40,8 +34,6 @@ const RiderForm = ({ mode = 'create' }) => {
   const [error, setError] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
-
-  // Snackbar states
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -59,7 +51,6 @@ const RiderForm = ({ mode = 'create' }) => {
     image_url: ''
   });
 
-  // Handle snackbar close
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -67,7 +58,6 @@ const RiderForm = ({ mode = 'create' }) => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  // Show snackbar message
   const showMessage = (message, severity = 'success') => {
     setSnackbar({
       open: true,
@@ -76,7 +66,6 @@ const RiderForm = ({ mode = 'create' }) => {
     });
   };
 
-  // Fetch rider data if in edit mode
   useEffect(() => {
     if (isEditMode && id) {
       const fetchRider = async () => {
@@ -84,13 +73,11 @@ const RiderForm = ({ mode = 'create' }) => {
           setLoading(true);
           const response = await apiRequest('GET', `/riders/${id}`);
           if (response.data) {
-            // Keep existing image_url in edit mode
             setFormData({
               ...response.data,
               date_of_birth: response.data.date_of_birth ? new Date(response.data.date_of_birth) : null
             });
 
-            // If there's an existing image, set it in the UI
             if (response.data.image_url) {
               setImagePreview(response.data.image_url);
             }
@@ -108,7 +95,6 @@ const RiderForm = ({ mode = 'create' }) => {
     }
   }, [isEditMode, id]);
 
-  // Auto-generate normalized name
   useEffect(() => {
     if (formData.name) {
       const normalized = formData.name
@@ -123,7 +109,6 @@ const RiderForm = ({ mode = 'create' }) => {
     }
   }, [formData.name]);
 
-  // Handle form field changes
   const handleChange = useCallback(
     (e) => {
       const { name, value } = e.target;
@@ -131,8 +116,6 @@ const RiderForm = ({ mode = 'create' }) => {
         ...prev,
         [name]: value
       }));
-
-      // Clear field-specific error when user types
       if (formErrors[name]) {
         setFormErrors((prev) => ({
           ...prev,
@@ -143,15 +126,12 @@ const RiderForm = ({ mode = 'create' }) => {
     [formErrors]
   );
 
-  // Handle date picker change
   const handleDateChange = useCallback(
     (date) => {
       setFormData((prev) => ({
         ...prev,
         date_of_birth: date
       }));
-
-      // Clear date error
       if (formErrors.date_of_birth) {
         setFormErrors((prev) => ({
           ...prev,
@@ -162,13 +142,10 @@ const RiderForm = ({ mode = 'create' }) => {
     [formErrors]
   );
 
-  // Handle numeric input validation
   const handleNumericChange = useCallback(
     (e) => {
       const { name, value } = e.target;
-      // Allow only numbers and decimal point with improved validation
       if (value === '' || /^\d*\.?\d*$/.test(value)) {
-        // Prevent standalone dot or initial zero
         if ((value === '.' || value === '0') && value.length === 1) {
           return;
         }
@@ -178,12 +155,9 @@ const RiderForm = ({ mode = 'create' }) => {
     [handleChange]
   );
 
-  // Handle image upload
   const handleImageUpload = useCallback(
     async (file) => {
       if (!file) return;
-
-      // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setFormErrors((prev) => ({
           ...prev,
@@ -191,8 +165,6 @@ const RiderForm = ({ mode = 'create' }) => {
         }));
         return;
       }
-
-      // Check file type
       const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (!validTypes.includes(file.type)) {
         setFormErrors((prev) => ({
@@ -201,15 +173,11 @@ const RiderForm = ({ mode = 'create' }) => {
         }));
         return;
       }
-
-      // Create preview for UI feedback
       const reader = new FileReader();
 
       reader.onload = (e) => {
         const base64String = e.target.result;
         setImagePreview(base64String);
-
-        // Store base64 image data in form state
         setFormData((prev) => ({
           ...prev,
           image_url: base64String
@@ -224,8 +192,6 @@ const RiderForm = ({ mode = 'create' }) => {
       };
 
       reader.readAsDataURL(file);
-
-      // Clear image error if exists
       if (formErrors.image_url) {
         setFormErrors((prev) => ({
           ...prev,
@@ -236,7 +202,6 @@ const RiderForm = ({ mode = 'create' }) => {
     [formErrors]
   );
 
-  // Form validation
   const validateForm = useCallback(() => {
     const errors = {};
 
@@ -244,22 +209,16 @@ const RiderForm = ({ mode = 'create' }) => {
     if (!formData.nationality.trim()) errors.nationality = 'Nationality is required';
     if (!formData.birth_place.trim()) errors.birth_place = 'Birth place is required';
     if (!formData.date_of_birth) errors.date_of_birth = 'Date of birth is required';
-
-    // Validate height
     if (!formData.height) {
       errors.height = 'Height is required';
     } else if (isNaN(parseFloat(formData.height)) || parseFloat(formData.height) <= 0) {
       errors.height = 'Height must be a positive number';
     }
-
-    // Validate weight
     if (!formData.weight) {
       errors.weight = 'Weight is required';
     } else if (isNaN(parseFloat(formData.weight)) || parseFloat(formData.weight) <= 0) {
       errors.weight = 'Weight must be a positive number';
     }
-
-    // Image validation only required for create mode
     if (!isEditMode && !formData.image_url) {
       errors.image_url = 'Rider image is required';
     }
@@ -268,7 +227,6 @@ const RiderForm = ({ mode = 'create' }) => {
     return Object.keys(errors).length === 0;
   }, [formData, isEditMode]);
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -277,8 +235,6 @@ const RiderForm = ({ mode = 'create' }) => {
     try {
       setSubmitting(true);
       setError(null);
-
-      // Transform data before sending
       const dataToSubmit = {
         ...formData,
         height: parseFloat(formData.height),
@@ -292,8 +248,6 @@ const RiderForm = ({ mode = 'create' }) => {
         await apiRequest('POST', '/riders', dataToSubmit);
         showMessage('Rider created successfully');
       }
-
-      // Navigate after short delay to show success message
       setTimeout(() => {
         navigate('/riders');
       }, 1500);
@@ -301,8 +255,6 @@ const RiderForm = ({ mode = 'create' }) => {
       const errorMessage = err?.message || 'Something went wrong. Please try again.';
       setError(errorMessage);
       showMessage(errorMessage, 'error');
-
-      // Handle validation errors from backend
       if (err.errors) {
         const backendErrors = {};
         Object.entries(err.errors).forEach(([field, message]) => {
@@ -315,12 +267,10 @@ const RiderForm = ({ mode = 'create' }) => {
     }
   };
 
-  // Handle cancel button
   const handleCancel = () => {
     navigate('/riders');
   };
 
-  // Handle image removal
   const handleRemoveImage = () => {
     setImagePreview(null);
     setFormData((prev) => ({
@@ -570,7 +520,6 @@ const RiderForm = ({ mode = 'create' }) => {
         </Box>
       </Box>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

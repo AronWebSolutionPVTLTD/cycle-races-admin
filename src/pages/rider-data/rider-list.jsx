@@ -29,7 +29,6 @@ const RidersPage = () => {
   const [selectedRider, setSelectedRider] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Snackbar state
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -56,10 +55,10 @@ const RidersPage = () => {
       format: (value) =>
         value
           ? new Date(value).toLocaleDateString('en-US', {
-              month: 'short',
-              day: '2-digit',
-              year: 'numeric'
-            })
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+          })
           : 'N/A'
     },
     {
@@ -122,7 +121,6 @@ const RidersPage = () => {
     }
   ];
 
-  // Show snackbar helper function
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -131,13 +129,11 @@ const RidersPage = () => {
     });
   };
 
-  // Handle search input change with debounce
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
-    setPage(0); // Reset to first page when searching
+    setPage(0);
   };
 
-  // Handle search submission
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       fetchRiders();
@@ -179,13 +175,12 @@ const RidersPage = () => {
     fetchRiders();
   }, [page, rowsPerPage]);
 
-  // Separate search effect to avoid too many API calls
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery !== undefined) {
         fetchRiders();
       }
-    }, 500); // 500ms debounce
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -317,7 +312,6 @@ const RidersPage = () => {
         onRowClick={handleRowClick}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}
@@ -326,7 +320,6 @@ const RidersPage = () => {
         itemType="rider"
       />
 
-      {/* Using custom snackbar component */}
       <CustomSnackbar open={snackbar.open} message={snackbar.message} severity={snackbar.severity} onClose={handleCloseSnackbar} />
     </Box>
   );

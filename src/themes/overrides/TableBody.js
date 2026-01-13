@@ -1,4 +1,3 @@
-// ==============================|| OVERRIDES - TABLE ROW ||============================== //
 
 export default function TableBody(theme) {
   const hoverStyle = {

@@ -1,15 +1,10 @@
-// material-ui
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid2';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-// project imports
 import MainCard from 'components/MainCard';
-
-// ==============================|| COMPONENTS - TYPOGRAPHY ||============================== //
 
 export default function ComponentTypography() {
   return (
