@@ -1,8 +1,13 @@
-import { ChromeOutlined, QuestionOutlined, OrderedListOutlined } from '@ant-design/icons';
+import { ChromeOutlined, QuestionOutlined, OrderedListOutlined,FlagOutlined,IdcardOutlined,TeamOutlined,PartitionOutlined,SwapOutlined } from '@ant-design/icons';
 const icons = {
   ChromeOutlined,
   QuestionOutlined,
-  OrderedListOutlined
+  OrderedListOutlined,
+  FlagOutlined,
+  IdcardOutlined,
+  TeamOutlined,
+  PartitionOutlined,
+  SwapOutlined
 };
 
 const support = {
@@ -15,28 +20,28 @@ const support = {
       title: 'Race Management',
       type: 'item',
       url: '/races-list',
-      icon: icons.OrderedListOutlined
+      icon: icons.FlagOutlined
     },
     {
       id: 'riders',
       title: 'Riders Management',
       type: 'item',
       url: '/riders',
-      icon: icons.OrderedListOutlined
+      icon: icons.IdcardOutlined
     },
     {
       id: 'teams',
       title: 'Team Management',
       type: 'item',
       url: '/teams',
-      icon: icons.OrderedListOutlined
+      icon: icons.TeamOutlined
     },
     {
       id: 'stages',
       title: 'Stages Management',
       type: 'item',
       url: '/stages',
-      icon: icons.OrderedListOutlined
+      icon: icons.PartitionOutlined
     },
 
     {
@@ -44,14 +49,14 @@ const support = {
       title: 'Race Merging',
       type: 'item',
       url: '/racemerging',
-      icon: icons.ChromeOutlined
+      icon: icons.SwapOutlined
     },
     {
       id: 'teammerging',
       title: 'Team Merging',
       type: 'item',
       url: '/teammerging',
-      icon: icons.ChromeOutlined
+      icon: icons.SwapOutlined
     },
   
   ]
