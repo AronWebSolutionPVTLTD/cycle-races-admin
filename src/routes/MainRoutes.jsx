@@ -16,6 +16,8 @@ import StageDetail from '../pages/stages-data/stage-detail';
 import StageForm from '../pages/stages-data/create-edit';
 import RaceMerging from '../pages/merge-data/racemerging';
 import TeamMerging from '../pages/merge-data/teammerging';
+import UpcomingRaces from '../pages/races-data/upcoming-races';
+import ScrapData from '../pages/scrap-data';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
@@ -58,6 +60,10 @@ const MainRoutes = {
     {
       path: 'races-list',
       element: <RaceList />
+    },
+    {
+      path: 'upcoming-races',
+      element: <UpcomingRaces />
     },
     {
       path: 'race/:id',
@@ -126,6 +132,10 @@ const MainRoutes = {
     {
       path: 'teammerging',
       element: <TeamMerging />
+    },
+    {
+      path: 'scrapping',
+      element: <ScrapData />
     },
   ]
 };

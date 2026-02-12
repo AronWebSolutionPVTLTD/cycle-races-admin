@@ -28,6 +28,8 @@ const RidersPage = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedRider, setSelectedRider] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRiders, setSelectedRiders] = useState([]);
+
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -36,6 +38,24 @@ const RidersPage = () => {
   });
 
   const columns = [
+    {
+      id: 'select',
+      label: '',
+      minWidth: 50,
+      format: (_, row) => (
+        <input
+          type="checkbox"
+          checked={selectedRiders.includes(row._id)}
+          onClick={(e) => e.stopPropagation()}
+          onChange={() => {
+            setSelectedRiders((prev) =>
+              prev.includes(row._id) ? [] : [row._id]
+            );
+          }}
+
+        />
+      )
+    },
     {
       id: 'name',
       label: 'Name',
@@ -240,6 +260,25 @@ const RidersPage = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  const handleSetFeatured = async () => {
+    try {
+      if (selectedRiders.length === 0) return;
+      const riderId = selectedRiders[0];
+      console.log(riderId,'riderId');
+  
+      await apiRequest("POST", "/admin/setFeaturedRider", {
+        rider_id: riderId
+      });
+  
+      showSnackbar("Spotlight rider set successfully", "success");
+      setSelectedRiders([]);
+  
+    } catch (err) {
+      showSnackbar(err.message || "Failed to set spotlight rider", "error");
+    }
+  };
+  
+
   return (
     <Box sx={{ width: '100%', px: { xs: 2, sm: 3, md: 4 }, py: 4 }}>
       <Box
@@ -279,7 +318,17 @@ const RidersPage = () => {
         </Stack>
       </Box>
 
-      <Box sx={{ mb: 3 }}>
+      <Box
+  sx={{
+    mb: 3,
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 2,
+    alignItems: "center",
+    flexWrap: "wrap"
+  }}
+>
+
         <TextField
           label="Search riders"
           variant="outlined"
@@ -297,6 +346,15 @@ const RidersPage = () => {
           }}
           sx={{ maxWidth: { xs: '100%', sm: '100%', md: '400px' } }}
         />
+         {selectedRiders.length > 0 && (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={handleSetFeatured}
+    >
+      Add Spotlight
+    </Button>
+  )}
       </Box>
 
       <CustomTable

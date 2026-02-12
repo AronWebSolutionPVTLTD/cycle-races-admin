@@ -22,6 +22,13 @@ const support = {
       url: '/races-list',
       icon: icons.FlagOutlined
     },
+       {
+      id: 'upcoming-races',
+      title: 'Upcoming Races',  
+      type: 'item',
+      url: '/upcoming-races',
+      icon: icons.FlagOutlined
+    },
     {
       id: 'riders',
       title: 'Riders Management',
@@ -56,6 +63,13 @@ const support = {
       title: 'Team Merging',
       type: 'item',
       url: '/teammerging',
+      icon: icons.SwapOutlined
+    },
+    {
+      id: 'scrapping',
+      title: 'Scrapping Data',
+      type: 'item',
+      url: '/scrapping',
       icon: icons.SwapOutlined
     },
   

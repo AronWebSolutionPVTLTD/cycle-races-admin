@@ -10,7 +10,8 @@ import {
   InputAdornment,
   Alert,
   FormHelperText,
-  Snackbar
+  Snackbar,
+  Autocomplete
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -28,7 +29,6 @@ const RiderForm = ({ mode = 'create' }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = mode === 'edit';
-
   const [loading, setLoading] = useState(isEditMode);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -48,8 +48,16 @@ const RiderForm = ({ mode = 'create' }) => {
     date_of_birth: null,
     height: '',
     weight: '',
+    similar_riders: [],
     image_url: ''
   });
+  const [similarOptions, setSimilarOptions] = useState([]);
+  const [similarLoading, setSimilarLoading] = useState(false);
+  const [similarSearchTerm, setSimilarSearchTerm] = useState('');
+  const [selectedSimilarRiders, setSelectedSimilarRiders] = useState([]);
+  const [similarPage, setSimilarPage] = useState(1);
+const [similarTotalPages, setSimilarTotalPages] = useState(1);
+
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -73,14 +81,26 @@ const RiderForm = ({ mode = 'create' }) => {
           setLoading(true);
           const response = await apiRequest('GET', `/riders/${id}`);
           if (response.data) {
-            setFormData({
-              ...response.data,
-              date_of_birth: response.data.date_of_birth ? new Date(response.data.date_of_birth) : null
-            });
+            const riderData = response.data;
 
-            if (response.data.image_url) {
-              setImagePreview(response.data.image_url);
+            setFormData({
+              ...riderData,
+              date_of_birth: riderData.date_of_birth
+                ? new Date(riderData.date_of_birth)
+                : null,
+              similar_riders: riderData.similar_riders
+                ? riderData.similar_riders.map(r => r._id)
+                : []
+            });
+          
+            if (riderData.similar_riders) {
+              setSelectedSimilarRiders(riderData.similar_riders);
             }
+          
+            if (riderData.image_url) {
+              setImagePreview(riderData.image_url);
+            }
+          
           }
         } catch (err) {
           const errorMsg = err?.message || 'Failed to load rider data';
@@ -108,6 +128,51 @@ const RiderForm = ({ mode = 'create' }) => {
       }));
     }
   }, [formData.name]);
+
+
+  const fetchSimilarRiders = useCallback(async (page = 1) => {
+    setSimilarLoading(true);
+  
+    try {
+      const data = await apiRequest('GET', '/riders', {}, {
+        page: page,
+        limit: 20,
+        search: similarSearchTerm || ''
+      });
+  
+      if (page === 1) {
+        setSimilarOptions(data.data || []);
+      } else {
+        setSimilarOptions(prev => [...prev, ...(data.data || [])]);
+      }
+  
+      setSimilarTotalPages(data.totalPages || 1);
+      setSimilarPage(page);
+  
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSimilarLoading(false);
+    }
+  }, [similarSearchTerm]);
+  
+
+  useEffect(() => {
+    fetchSimilarRiders();
+  }, []);
+
+  
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSimilarPage(1);
+      fetchSimilarRiders(1);
+    }, 300);
+  
+    return () => clearTimeout(timer);
+  }, [similarSearchTerm]);
+  
+  
 
   const handleChange = useCallback(
     (e) => {
@@ -207,21 +272,21 @@ const RiderForm = ({ mode = 'create' }) => {
 
     if (!formData.name.trim()) errors.name = 'Name is required';
     if (!formData.nationality.trim()) errors.nationality = 'Nationality is required';
-    if (!formData.birth_place.trim()) errors.birth_place = 'Birth place is required';
-    if (!formData.date_of_birth) errors.date_of_birth = 'Date of birth is required';
-    if (!formData.height) {
-      errors.height = 'Height is required';
-    } else if (isNaN(parseFloat(formData.height)) || parseFloat(formData.height) <= 0) {
-      errors.height = 'Height must be a positive number';
-    }
-    if (!formData.weight) {
-      errors.weight = 'Weight is required';
-    } else if (isNaN(parseFloat(formData.weight)) || parseFloat(formData.weight) <= 0) {
-      errors.weight = 'Weight must be a positive number';
-    }
-    if (!isEditMode && !formData.image_url) {
-      errors.image_url = 'Rider image is required';
-    }
+    // if (!formData.birth_place.trim()) errors.birth_place = 'Birth place is required';
+    // if (!formData.date_of_birth) errors.date_of_birth = 'Date of birth is required';
+    // if (!formData.height) {
+    //   errors.height = 'Height is required';
+    // } else if (isNaN(parseFloat(formData.height)) || parseFloat(formData.height) <= 0) {
+    //   errors.height = 'Height must be a positive number';
+    // }
+    // if (!formData.weight) {
+    //   errors.weight = 'Weight is required';
+    // } else if (isNaN(parseFloat(formData.weight)) || parseFloat(formData.weight) <= 0) {
+    //   errors.weight = 'Weight must be a positive number';
+    // }
+    // if (!isEditMode && !formData.image_url) {
+    //   errors.image_url = 'Rider image is required';
+    // }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -410,6 +475,79 @@ const RiderForm = ({ mode = 'create' }) => {
             />
           </Stack>
 
+          <Box sx={{ width: '100%', mb: 3 }}>
+  <Typography variant="subtitle1" gutterBottom>
+   Set Similar Riders
+  </Typography>
+
+  <Autocomplete
+  multiple
+  disableCloseOnSelect
+  options={[
+    ...selectedSimilarRiders,
+    ...similarOptions.filter(
+      option =>
+        !selectedSimilarRiders.some(r => r._id === option._id)
+    )
+  ]}
+  value={selectedSimilarRiders}
+  loading={similarLoading}
+
+  isOptionEqualToValue={(option, value) =>
+    option._id === value._id
+  }
+
+  getOptionLabel={(option) => option.name || ''}
+
+  getOptionDisabled={(option) =>
+    selectedSimilarRiders.length >= 3 &&
+    !selectedSimilarRiders.some(r => r._id === option._id)
+  }
+
+  onChange={(event, newValue) => {
+    if (newValue.length > 3) return;
+  
+    setSelectedSimilarRiders(newValue);
+  
+    setFormData(prev => ({
+      ...prev,
+      similar_riders: newValue.map(r => r._id)
+    }));
+  }}
+
+  onInputChange={(event, value) => {
+    setSimilarSearchTerm(value);
+  }}
+
+  renderOption={(props, option, { selected }) => (
+    <li {...props} key={option._id}>
+      <input
+        type="checkbox"
+        checked={selected}
+        disabled={
+          selectedSimilarRiders.length >= 3 &&
+          !selectedSimilarRiders.some(r => r._id === option._id)
+        }
+        style={{ marginRight: 8 }}
+      />
+      {option.name}
+    </li>
+  )}
+
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      placeholder="Search riders..."
+      helperText="Maximum 3 riders allowed"
+      fullWidth
+    />
+  )}
+/>
+
+
+</Box>
+
+
           <Box sx={{ width: '100%' }}>
             <Typography variant="subtitle1" gutterBottom>
               Rider Image{' '}
@@ -487,6 +625,9 @@ const RiderForm = ({ mode = 'create' }) => {
               {formErrors.image_url && <FormHelperText error>{formErrors.image_url}</FormHelperText>}
             </Box>
           </Box>
+
+ 
+
         </Stack>
 
         <Box
