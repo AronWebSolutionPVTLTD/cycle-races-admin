@@ -116,10 +116,8 @@ const UpcomingRaces = () => {
             };
 
             const data = await apiRequest('GET', '/admin/getUpcomingRaces', {}, queryParams);
-
             setRaces(data.data);
             setTotalCount(data.totalRaces);
-            console.log(data, 'data');
         } catch (error) {
             setError(error.message || 'Failed to fetch races');
             showSnackbar(error.message || 'Failed to fetch races', 'error');
@@ -159,8 +157,6 @@ const UpcomingRaces = () => {
         try {
             if (selectedRaces.length === 0) return;
             const raceId = selectedRaces[0];
-            console.log(raceId, 'raceId');
-
             await apiRequest("POST", "/admin/setFeaturedRace", {
                 race_id: raceId
             });
