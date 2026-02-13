@@ -56,7 +56,7 @@ const RiderForm = ({ mode = 'create' }) => {
   const [similarSearchTerm, setSimilarSearchTerm] = useState('');
   const [selectedSimilarRiders, setSelectedSimilarRiders] = useState([]);
   const [similarPage, setSimilarPage] = useState(1);
-const [similarTotalPages, setSimilarTotalPages] = useState(1);
+  const [similarTotalPages, setSimilarTotalPages] = useState(1);
 
 
   const handleSnackbarClose = (event, reason) => {
@@ -92,15 +92,15 @@ const [similarTotalPages, setSimilarTotalPages] = useState(1);
                 ? riderData.similar_riders.map(r => r._id)
                 : []
             });
-          
+
             if (riderData.similar_riders) {
               setSelectedSimilarRiders(riderData.similar_riders);
             }
-          
+
             if (riderData.image_url) {
               setImagePreview(riderData.image_url);
             }
-          
+
           }
         } catch (err) {
           const errorMsg = err?.message || 'Failed to load rider data';
@@ -132,47 +132,47 @@ const [similarTotalPages, setSimilarTotalPages] = useState(1);
 
   const fetchSimilarRiders = useCallback(async (page = 1) => {
     setSimilarLoading(true);
-  
+
     try {
       const data = await apiRequest('GET', '/riders', {}, {
         page: page,
         limit: 20,
         search: similarSearchTerm || ''
       });
-  
+
       if (page === 1) {
         setSimilarOptions(data.data || []);
       } else {
         setSimilarOptions(prev => [...prev, ...(data.data || [])]);
       }
-  
+
       setSimilarTotalPages(data.totalPages || 1);
       setSimilarPage(page);
-  
+
     } catch (err) {
       console.error(err);
     } finally {
       setSimilarLoading(false);
     }
   }, [similarSearchTerm]);
-  
+
 
   useEffect(() => {
     fetchSimilarRiders();
   }, []);
 
-  
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setSimilarPage(1);
       fetchSimilarRiders(1);
     }, 300);
-  
+
     return () => clearTimeout(timer);
   }, [similarSearchTerm]);
-  
-  
+
+
 
   const handleChange = useCallback(
     (e) => {
@@ -476,76 +476,76 @@ const [similarTotalPages, setSimilarTotalPages] = useState(1);
           </Stack>
 
           <Box sx={{ width: '100%', mb: 3 }}>
-  <Typography variant="subtitle1" gutterBottom>
-   Set Similar Riders
-  </Typography>
+            <Typography variant="subtitle1" gutterBottom>
+              Set Similar Riders
+            </Typography>
 
-  <Autocomplete
-  multiple
-  disableCloseOnSelect
-  options={[
-    ...selectedSimilarRiders,
-    ...similarOptions.filter(
-      option =>
-        !selectedSimilarRiders.some(r => r._id === option._id)
-    )
-  ]}
-  value={selectedSimilarRiders}
-  loading={similarLoading}
+            <Autocomplete
+              multiple
+              disableCloseOnSelect
+              options={[
+                ...selectedSimilarRiders,
+                ...similarOptions.filter(
+                  option =>
+                    !selectedSimilarRiders.some(r => r._id === option._id)
+                )
+              ]}
+              value={selectedSimilarRiders}
+              loading={similarLoading}
 
-  isOptionEqualToValue={(option, value) =>
-    option._id === value._id
-  }
+              isOptionEqualToValue={(option, value) =>
+                option._id === value._id
+              }
 
-  getOptionLabel={(option) => option.name || ''}
+              getOptionLabel={(option) => option.name || ''}
 
-  getOptionDisabled={(option) =>
-    selectedSimilarRiders.length >= 3 &&
-    !selectedSimilarRiders.some(r => r._id === option._id)
-  }
+              getOptionDisabled={(option) =>
+                selectedSimilarRiders.length >= 3 &&
+                !selectedSimilarRiders.some(r => r._id === option._id)
+              }
 
-  onChange={(event, newValue) => {
-    if (newValue.length > 3) return;
-  
-    setSelectedSimilarRiders(newValue);
-  
-    setFormData(prev => ({
-      ...prev,
-      similar_riders: newValue.map(r => r._id)
-    }));
-  }}
+              onChange={(event, newValue) => {
+                if (newValue.length > 3) return;
 
-  onInputChange={(event, value) => {
-    setSimilarSearchTerm(value);
-  }}
+                setSelectedSimilarRiders(newValue);
 
-  renderOption={(props, option, { selected }) => (
-    <li {...props} key={option._id}>
-      <input
-        type="checkbox"
-        checked={selected}
-        disabled={
-          selectedSimilarRiders.length >= 3 &&
-          !selectedSimilarRiders.some(r => r._id === option._id)
-        }
-        style={{ marginRight: 8 }}
-      />
-      {option.name}
-    </li>
-  )}
+                setFormData(prev => ({
+                  ...prev,
+                  similar_riders: newValue.map(r => r._id)
+                }));
+              }}
 
-  renderInput={(params) => (
-    <TextField
-      {...params}
-      placeholder="Search riders..."
-      helperText="Maximum 3 riders allowed"
-      fullWidth
-    />
-  )}
-/>
+              onInputChange={(event, value) => {
+                setSimilarSearchTerm(value);
+              }}
+
+              renderOption={(props, option, { selected }) => (
+                <li {...props} key={option._id}>
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    disabled={
+                      selectedSimilarRiders.length >= 3 &&
+                      !selectedSimilarRiders.some(r => r._id === option._id)
+                    }
+                    style={{ marginRight: 8 }}
+                  />
+                  {option.name}
+                </li>
+              )}
+
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search riders..."
+                  helperText="Maximum 3 riders allowed"
+                  fullWidth
+                />
+              )}
+            />
 
 
-</Box>
+          </Box>
 
 
           <Box sx={{ width: '100%' }}>
@@ -626,7 +626,7 @@ const [similarTotalPages, setSimilarTotalPages] = useState(1);
             </Box>
           </Box>
 
- 
+
 
         </Stack>
 

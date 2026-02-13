@@ -1,4 +1,4 @@
-import { ChromeOutlined, QuestionOutlined, OrderedListOutlined,FlagOutlined,IdcardOutlined,TeamOutlined,PartitionOutlined,SwapOutlined } from '@ant-design/icons';
+import { ChromeOutlined, QuestionOutlined, OrderedListOutlined,FlagOutlined,IdcardOutlined,TeamOutlined,PartitionOutlined,SwapOutlined,RobotOutlined  } from '@ant-design/icons';
 const icons = {
   ChromeOutlined,
   QuestionOutlined,
@@ -7,7 +7,8 @@ const icons = {
   IdcardOutlined,
   TeamOutlined,
   PartitionOutlined,
-  SwapOutlined
+  SwapOutlined,
+  RobotOutlined 
 };
 
 const support = {
@@ -70,7 +71,7 @@ const support = {
       title: 'Scrapping Data',
       type: 'item',
       url: '/scrapping',
-      icon: icons.SwapOutlined
+      icon: icons.RobotOutlined 
     },
   
   ]

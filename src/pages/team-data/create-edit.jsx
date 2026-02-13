@@ -23,7 +23,6 @@ const TeamForm = ({ mode = 'create' }) => {
     message: '',
     severity: 'success'
   });
-  console.log(isEditMode, 'mode');
   const [loading, setLoading] = useState(false);
   const [availableRiders, setAvailableRiders] = useState([]);
   const [selectedRiderIds, setSelectedRiderIds] = useState([]);
