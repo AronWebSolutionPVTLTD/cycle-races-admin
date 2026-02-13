@@ -264,8 +264,6 @@ const RidersPage = () => {
     try {
       if (selectedRiders.length === 0) return;
       const riderId = selectedRiders[0];
-      console.log(riderId,'riderId');
-  
       await apiRequest("POST", "/admin/setFeaturedRider", {
         rider_id: riderId
       });

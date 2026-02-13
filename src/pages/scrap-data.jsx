@@ -29,7 +29,7 @@ const ScrapData = () => {
         { length: maxYear - 1960 + 1 },
         (_, i) => String(maxYear - i)
     );
-    
+
 
     const [fromYear, setFromYear] = useState(null);
     const [toYear, setToYear] = useState(null);
