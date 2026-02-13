@@ -27,9 +27,9 @@ const ScrapData = () => {
 
     const yearOptions = Array.from(
         { length: maxYear - 1960 + 1 },
-        (_, i) => maxYear - i
+        (_, i) => String(maxYear - i)
     );
-
+    
 
     const [fromYear, setFromYear] = useState(null);
     const [toYear, setToYear] = useState(null);
@@ -61,28 +61,30 @@ const ScrapData = () => {
     };
 
     const handleScrapConfirm = async () => {
-        try {
-            setLoading(true);
+        alert("Scrap data from " + fromYear + " to " + toYear);
+        setScrapDialogOpen(false);
+        // try {
+        //     setLoading(true);
 
-            await apiRequest("POST", "/admin/scrapRaceData", {
-                fromYear,
-                toYear
-            });
+        //     await apiRequest("POST", "/admin/scrapRaceData", {
+        //         fromYear,
+        //         toYear
+        //     });
 
-            showSnackbar(
-                `Data successfully scrapped from ${fromYear} to ${toYear}`,
-                "success"
-            );
+        //     showSnackbar(
+        //         `Data successfully scrapped from ${fromYear} to ${toYear}`,
+        //         "success"
+        //     );
 
-            setScrapDialogOpen(false);
-            setFromYear(null);
-            setToYear(null);
-        } catch (error) {
-            showSnackbar(error.message || "Failed to scrap data", "error");
-            setScrapDialogOpen(false);
-        } finally {
-            setLoading(false);
-        }
+        //     setScrapDialogOpen(false);
+        //     setFromYear(null);
+        //     setToYear(null);
+        // } catch (error) {
+        //     showSnackbar(error.message || "Failed to scrap data", "error");
+        //     setScrapDialogOpen(false);
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     const handleCloseSnackbar = () => {
